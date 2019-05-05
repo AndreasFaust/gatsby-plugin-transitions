@@ -1,3 +1,9 @@
+#### 0.4.1 (2019-05-05)
+
+##### Documentation Changes
+
+*  improve. (cc8d15a6)
+
 ### 0.4.0 (2019-05-05)
 
 ##### Documentation Changes
