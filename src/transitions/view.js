@@ -1,26 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import { useStateContext } from './state'
-// import usePrev from './hooks/usePrev'
-import { useSpring, animated, config } from 'react-spring'
+import { useSpring, animated } from 'react-spring'
 
 const TransitionView = ({ view, action }) => {
-  const [{ prevLocation, mode }, dispatch] = useStateContext()
+  const [{ prevLocation, mode, enter, usual, leave }, dispatch] = useStateContext()
   const [styles, setStyles] = useState({
     position: 'fixed',
     transform: `translate3d(0,-${prevLocation && prevLocation.y[1]}px,0)`
   })
   const [props, set] = useSpring(() => ({
-    opacity: 0,
-    y: 50,
-    config: { ...config.stiff, clamp: true }
-    // config: { duration: 3000 }
+    ...enter
   }))
-
   useEffect(() => {
     if (action === 'enter') {
       set({
-        opacity: 1,
-        y: 0,
+        ...usual,
         onRest: () => {
           if (mode === 'immediate') {
             window.scrollTo(0, 0)
@@ -33,8 +27,7 @@ const TransitionView = ({ view, action }) => {
       })
     } else {
       set({
-        opacity: 0,
-        y: 1,
+        ...leave,
         onRest: () => {
           dispatch({ type: 'REMOVE_VIEW', pathname: view.key })
           if (mode === 'successive') {
@@ -61,7 +54,7 @@ const TransitionView = ({ view, action }) => {
           width: '100%',
           willChange: 'opacity, transform',
           opacity: props.opacity,
-          transform: props.y.interpolate((y) => `translate3d(0,${y}px,0)`)
+          transform: props.transform
         }}
         className='view'>
         {view}

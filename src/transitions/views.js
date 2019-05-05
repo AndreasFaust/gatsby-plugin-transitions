@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef } from 'react'
+import React, { useEffect } from 'react'
 import { useStateContext } from './state'
 // import usePrev from './hooks/usePrev'
 import View from './view'
