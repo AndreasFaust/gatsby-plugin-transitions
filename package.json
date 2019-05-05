@@ -1,0 +1,66 @@
+{
+  "name": "gatsby-plugin-transitions",
+  "description": "Gatsby-plugin for animated page-transitions.",
+  "version": "0.0.0",
+  "author": "Andreas Faust",
+  "license": "MIT",
+  "repository": "AndreasFaust/gatsby-plugin-transitions",
+  "homepage": "https://andreasfaust.github.io/gatsby-plugin-transitions/",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "jsnext:main": "dist/index.es.js",
+  "engines": {
+    "node": ">=8",
+    "npm": ">=5"
+  },
+  "dependencies": {
+    "prop-types": "^15.7.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.4.4",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-plugin-macros": "^2.5.1",
+    "gatsby": "^2.0.119",
+    "gatsby-plugin-layout": "^1.0.15",
+    "gatsby-plugin-react-helmet": "^3.0.2",
+    "gatsby-plugin-sass": "^2.0.11",
+    "generate-changelog": "^1.7.1",
+    "gh-pages": "^2.0.1",
+    "node-sass": "^4.12.0",
+    "react": "^16.8.5",
+    "react-dom": "^16.8.5",
+    "react-spring": "^8.0.20",
+    "rollup": "^1.1.2",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-resolve": "^4.0.0",
+    "rollup-plugin-peer-deps-external": "^2.2.0",
+    "rollup-plugin-url": "^2.1.0",
+    "standard": "^12.0.1"
+  },
+  "peerDependencies": {
+    "react": "^16.8.5",
+    "react-dom": "^16.8.5",
+    "react-spring": "^8.0.0"
+  },
+  "keywords": [
+    "gatsby",
+    "gatsby-plugin",
+    "transitions",
+    "page-transitions",
+    "animation"
+  ],
+  "scripts": {
+    "dev": "gatsby develop",
+    "start": "yarn dev",
+    "build": "rollup -c && gatsby build",
+    "release:major": "changelog -M && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version major && git push origin && git push origin --tags && yarn publish",
+    "release:minor": "changelog -m && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version minor && git push origin && git push origin --tags && yarn publish",
+    "release:patch": "changelog -p && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version patch && git push origin && git push origin --tags && yarn publish",
+    "deploy": "gh-pages -d build"
+  }
+}
