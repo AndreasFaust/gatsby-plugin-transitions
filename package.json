@@ -1,7 +1,7 @@
 {
   "name": "gatsby-plugin-transitions",
   "description": "Gatsby-plugin for animated page-transitions.",
-  "version": "0.0.0",
+  "version": "0.1.1",
   "author": "Andreas Faust",
   "license": "MIT",
   "repository": "AndreasFaust/gatsby-plugin-transitions",
@@ -57,10 +57,10 @@
   "scripts": {
     "dev": "gatsby develop",
     "start": "yarn dev",
-    "build": "rollup -c && gatsby build",
+    "build": "rollup -c && gatsby build --prefix-paths",
     "release:major": "changelog -M && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version major && git push origin && git push origin --tags && yarn publish",
     "release:minor": "changelog -m && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version minor && git push origin && git push origin --tags && yarn publish",
     "release:patch": "changelog -p && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version patch && git push origin && git push origin --tags && yarn publish",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d public"
   }
 }
