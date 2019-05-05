@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer, useState, useEffect } from 'react';
-import { useSpring, config, animated } from 'react-spring';
+import { config, useSpring, animated } from 'react-spring';
 
 function unwrapExports (x) {
 	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
@@ -1344,6 +1344,40 @@ TransitionLink.defaultProps = {
   children: null
 };
 
+function validateSpring(spring) {
+  var validated = {};
+  Object.keys(spring).map(function (key) {
+    switch (key) {
+      case 'opacity':
+        if (typeof spring[key] === 'number') {
+          validated[key] = spring[key];
+        }
+
+        break;
+
+      case 'transform':
+        if (spring[key] && typeof spring[key] === 'string') {
+          validated[key] = spring[key];
+        }
+
+        break;
+
+      case 'config':
+        if (typeof spring[key] === 'string') {
+          validated[key] = config[spring[key]] || {};
+        } else {
+          validated[key] = spring[key];
+        }
+
+        break;
+
+      default:
+        validated[key] = spring[key];
+    }
+  });
+  return validated;
+}
+
 var TransitionView = function TransitionView(_ref) {
   var view = _ref.view,
       action = _ref.action;
@@ -1353,6 +1387,9 @@ var TransitionView = function TransitionView(_ref) {
       _useStateContext2$ = _useStateContext2[0],
       prevLocation = _useStateContext2$.prevLocation,
       mode = _useStateContext2$.mode,
+      enter = _useStateContext2$.enter,
+      usual = _useStateContext2$.usual,
+      leave = _useStateContext2$.leave,
       dispatch = _useStateContext2[1];
 
   var _useState = useState({
@@ -1364,14 +1401,7 @@ var TransitionView = function TransitionView(_ref) {
       setStyles = _useState2[1];
 
   var _useSpring = useSpring(function () {
-    return {
-      opacity: 0,
-      y: 50,
-      config: _objectSpread({}, config.stiff, {
-        clamp: true // config: { duration: 3000 }
-
-      })
-    };
+    return _objectSpread({}, enter);
   }),
       _useSpring2 = _slicedToArray(_useSpring, 2),
       props = _useSpring2[0],
@@ -1379,10 +1409,8 @@ var TransitionView = function TransitionView(_ref) {
 
   useEffect(function () {
     if (action === 'enter') {
-      set({
-        opacity: 1,
-        y: 0,
-        onRest: function onRest() {
+      set(_objectSpread({}, usual, {
+        onRest: function onRest(props) {
           if (mode === 'immediate') {
             window.scrollTo(0, 0);
           }
@@ -1391,13 +1419,12 @@ var TransitionView = function TransitionView(_ref) {
             position: 'relative',
             transform: 'translate3d(0, 0px, 0)'
           });
+          if (typeof usual.onRest === 'function') usual.onRest(props);else if (typeof enter.onRest === 'function') enter.onRest(props);
         }
-      });
+      }));
     } else {
-      set({
-        opacity: 0,
-        y: 1,
-        onRest: function onRest() {
+      set(_objectSpread({}, leave, {
+        onRest: function onRest(props) {
           dispatch({
             type: 'REMOVE_VIEW',
             pathname: view.key
@@ -1409,8 +1436,10 @@ var TransitionView = function TransitionView(_ref) {
               type: 'ADD_VIEW'
             });
           }
+
+          if (typeof leave.onRest === 'function') leave.onRest(props);
         }
-      });
+      }));
     }
   }, [action]);
   return React.createElement("div", {
@@ -1427,9 +1456,7 @@ var TransitionView = function TransitionView(_ref) {
       width: '100%',
       willChange: 'opacity, transform',
       opacity: props.opacity,
-      transform: props.y.interpolate(function (y) {
-        return "translate3d(0,".concat(y, "px,0)");
-      })
+      transform: props.transform
     },
     className: "view"
   }, view));
@@ -1491,7 +1518,10 @@ var TransitionViews = function TransitionViews(_ref) {
 var TransitionProvider = function TransitionProvider(_ref) {
   var location = _ref.location,
       mode = _ref.mode,
-      children = _ref.children;
+      children = _ref.children,
+      enter = _ref.enter,
+      usual = _ref.usual,
+      leave = _ref.leave;
   return React.createElement(StateProvider, {
     reducer: reducer,
     initialState: {
@@ -1499,7 +1529,10 @@ var TransitionProvider = function TransitionProvider(_ref) {
       prevLocation: null,
       views: [children],
       queue: null,
-      mode: mode
+      mode: mode,
+      enter: validateSpring(enter),
+      usual: validateSpring(usual),
+      leave: validateSpring(leave)
     }
   }, React.createElement(TransitionViews, {
     location: location
@@ -1509,15 +1542,27 @@ var TransitionProvider = function TransitionProvider(_ref) {
 TransitionProvider.propTypes = {
   location: propTypes.object,
   mode: propTypes.string,
-  children: propTypes.node
+  children: propTypes.node,
+  enter: propTypes.object,
+  leave: propTypes.object
 };
 TransitionProvider.defaultProps = {
   mode: 'successive',
   location: {},
-  children: null
+  children: null,
+  enter: {
+    opacity: 0,
+    config: 'stiff'
+  },
+  usual: {
+    opacity: 1,
+    config: 'stiff'
+  },
+  leave: {
+    opacity: 0,
+    config: 'stiff'
+  }
 };
-
-// Transition.displayName = 'Transition'
 
 export { TransitionLink, TransitionProvider, useStateContext as useTransitionContext };
 //# sourceMappingURL=index.es.js.map
