@@ -1,5 +1,6 @@
 import React from 'react'
-import { TransitionProvider, TransitionLink } from '../transitions'
+import { TransitionProvider } from '../transitions'
+import { Link } from 'gatsby'
 
 import './reset.scss'
 import './index.scss'
@@ -7,12 +8,12 @@ import './index.scss'
 const Header = () => {
   return (
     <header className='header'>
-      <TransitionLink to='/' className='header__link'>
+      <Link to='/' className='header__link'>
         Home
-      </TransitionLink>
-      <TransitionLink to='/page-2' className='header__link'>
+      </Link>
+      <Link to='/page-2' className='header__link'>
         Page-2
-      </TransitionLink>
+      </Link>
     </header>
   )
 }
@@ -26,10 +27,15 @@ const Layout = ({
         location={location}
         enter={{
           opacity: 0,
-          transform: 'translate3d(0,10vh,0) scale3d(0.1, 0.1, 1)',
-          config: 'stiff',
+          transform: 'translate3d(0,10vh,0) scale3d(1, 1, 1)',
+          config: {
+            mass: 1,
+            tension: 210,
+            friction: 20,
+            clamp: true
+          },
           onRest: (props) => {
-            console.log('HALLO!')
+            console.log('onRest!')
             console.log(props)
           }
         }}
@@ -42,7 +48,12 @@ const Layout = ({
         leave={{
           opacity: 0,
           transform: 'translate3d(0,-50vh,0) scale3d(10, 10, 1)',
-          config: 'wobbly'
+          config: {
+            mass: 1,
+            tension: 210,
+            friction: 20,
+            clamp: true
+          }
         }}
         // mode={'immediate'}
       >

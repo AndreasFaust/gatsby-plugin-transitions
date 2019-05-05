@@ -1573,5 +1573,5 @@ TransitionProvider.defaultProps = {
 
 exports.TransitionLink = TransitionLink;
 exports.TransitionProvider = TransitionProvider;
-exports.useTransitionContext = useStateContext;
+exports.useTransitionStore = useStateContext;
 //# sourceMappingURL=index.js.map

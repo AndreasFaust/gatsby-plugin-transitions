@@ -96,7 +96,7 @@ The key `config` can be either a regular **react-spring**-config-object.
 
 Or pass in the name of a **react-spring**-default (`default`, `gentle`, `wobbly`, `stiff`, `slow`, `molasses`) as string.
 
-## useTransitionState
+## useTransitionStore
 
 A hook, that exposes the plugin’s state-management.
 It returns an `Array` with 2 elements:
@@ -108,10 +108,10 @@ Currently it is just useful for reading values: For example to easily get the cu
 
 ```jsx
 import React from "react";
-import { useTransitionState } from "gatsby-plugin-transitions";
+import { useTransitionStore } from "gatsby-plugin-transitions";
 
 const MyComponent = () => {
-  const [{ currentLocation }] = useTransitionState();
+  const [{ currentLocation }] = useTransitionStore();
   return <h1>{currentLocation.pathname}</h1>;
 };
 
