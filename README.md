@@ -1,12 +1,12 @@
-**gatsby-plugin-transitions** enables smooth page-transitions. It uses react-spring for the animations.
+**gatsby-plugin-transitions** enables animated page-transitions. It uses react-spring for smooth, customizable animations.
 
 [![NPM](https://img.shields.io/npm/v/gatsby-plugin-transitions.svg)](https://www.npmjs.com/package/gatsby-plugin-transitions) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
-🛷 [Have a look at the example!](https://andreasfaust.github.io/gatsby-plugin-transitions/)
+🚀 [Have a look at the example!](https://andreasfaust.github.io/gatsby-plugin-transitions/)
 
 **This Project is under development. Please join and contribute!**
 
-**Beware:** Until version 1.0.0 the API can and does change (constantly). Any (breaking-)changes are expressed in minor-updates and will be noted in the docs immediatedly.
+🔥 **Beware:** Until version 1.0.0 the API can and does change (constantly). Any (breaking-)changes are expressed in minor-updates and will be noted in the docs immediatedly.
 
 ## Install
 
@@ -56,8 +56,7 @@ const Layout = ({ location, children }) => {
 export default Layout;
 ```
 
-🎉 **Voila!** You have smooth animated page-transitions!
-No customize those transitions!
+🎉 **Voila!** You have smooth animated page-transitions! **Now customize these!**
 
 ## TransitionProvider
 
@@ -73,18 +72,18 @@ List of props:
 
 ### Transition-Mode
 
-`'successive'` — Wait till previous view has disappeared.
-`'immediate'` — Next view is entering while previous view is disappearing.
+- `successive`: Wait till previous view has disappeared.
+- `immediate`: Next view is entering while previous view is disappearing.
 
 ### Default-Springs
 
 You can enter default-springs for all animation-states:
 
-`'enter'` — From-values, when the view is entering.
-`'usual'` — Normal animation-state of the view.
-`'leave'` — To-Values, when the view is leaving.
+- `enter`: From-values, when the view is entering.
+- `usual`: Normal animation-state of the view.
+- `leave`: To-Values, when the view is leaving.
 
-**Caution:** In react-spring the values of the previous animation persist. For example: If you want to execute a `onRest`-function only on `'enter'`, you have to overwrite it in `'leave'`!
+**Caution:** In react-spring the values of the previous animation persist. For example: If you want to execute a `onRest`-function only on `enter`, you have to overwrite it in `leave`!
 
 #### opacity and transform
 
@@ -99,13 +98,13 @@ Or pass in the name of a **react-spring**-default (`default`, `gentle`, `wobbly`
 
 ## useTransitionState
 
-A hook, that exposes the state-management of the transitions-component.
-The hook returns an `Array` with 2 elements:
+A hook, that exposes the plugin’s state-management.
+It returns an `Array` with 2 elements:
 
 1.  **state** of type `object`
 2.  **dispatch** of type `function`
 
-Currently it is just useful for reading values: For example to get the current location-object.
+Currently it is just useful for reading values: For example to easily get the current location-object.
 
 ```jsx
 import React from "react";
@@ -121,6 +120,7 @@ export default MyComponent;
 
 ## To-Do
 
+- [ ] Individual Transitions bound to Links (like [gatsby-plugin-transition-link](https://github.com/TylerBarnes/gatsby-plugin-transition-link))
 - [ ] Testing
 
 ## Contributing
