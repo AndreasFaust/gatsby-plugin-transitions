@@ -9,19 +9,23 @@ export default function validateSpring (spring) {
           validated[key] = spring[key]
         }
         break
+
       case 'transform':
         if (spring[key] && typeof spring[key] === 'string') {
           validated[key] = spring[key]
         }
         break
-      case 'config':
 
+      case 'config':
         if (typeof spring[key] === 'string') {
-          validated[key] = { ...config[spring[key]] || {}, clamp: true }
+          validated[key] = config[spring[key]] || {}
         } else {
           validated[key] = spring[key]
         }
         break
+
+      default:
+        validated[key] = spring[key]
     }
   })
   return validated

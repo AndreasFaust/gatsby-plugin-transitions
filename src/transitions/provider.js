@@ -12,7 +12,6 @@ const TransitionProvider = ({
   usual,
   leave
 }) => {
-  console.log(enter)
   return (
     <StateProvider reducer={reducer} initialState={{
       currentLocation: location,
