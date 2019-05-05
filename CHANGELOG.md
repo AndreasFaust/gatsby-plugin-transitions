@@ -1,3 +1,9 @@
+### 0.3.0 (2019-05-05)
+
+##### New Features
+
+*  add default transitions. (f0e9adfd)
+
 #### 0.2.2 (2019-05-05)
 
 ##### Bug Fixes
