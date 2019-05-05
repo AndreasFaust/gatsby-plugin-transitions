@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useReducer, useState, useEffect } from 'react';
 import { useSpring, config, animated } from 'react-spring';
 
 function unwrapExports (x) {
@@ -1519,5 +1519,5 @@ TransitionProvider.defaultProps = {
 
 // Transition.displayName = 'Transition'
 
-export { TransitionLink, TransitionProvider };
+export { TransitionLink, TransitionProvider, useStateContext as useTransitionContext };
 //# sourceMappingURL=index.es.js.map
