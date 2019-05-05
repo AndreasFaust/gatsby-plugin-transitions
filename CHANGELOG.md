@@ -1,3 +1,9 @@
+### 0.4.0 (2019-05-05)
+
+##### Documentation Changes
+
+*  Write docs. (33e6dedb)
+
 ### 0.3.0 (2019-05-05)
 
 ##### New Features
