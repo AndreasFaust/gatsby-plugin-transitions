@@ -1,3 +1,9 @@
+## 1.0.0 (2019-05-07)
+
+##### Bug Fixes
+
+*  Fix location.pathname-slash-at-the-end-bug. (4aa3bf45)
+
 #### 0.4.3 (2019-05-05)
 
 ##### Bug Fixes
