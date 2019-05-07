@@ -1427,7 +1427,6 @@ var TransitionView = function TransitionView(_ref) {
             type: 'REMOVE_VIEW',
             locationKey: view.props.location.key
           });
-          console.log(mode);
 
           if (mode === 'successive') {
             window.scrollTo(0, 0);
@@ -1440,7 +1439,7 @@ var TransitionView = function TransitionView(_ref) {
         }
       }));
     }
-  }, [action, mode]);
+  }, [action]);
   return React.createElement("div", {
     className: "view-container",
     style: _objectSpread({
