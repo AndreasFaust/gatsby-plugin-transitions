@@ -1257,35 +1257,67 @@ function getY(currentLocation) {
   return scrollArray[1];
 }
 
+function filterViews(views) {
+  return views.filter(function (view) {
+    return view;
+  });
+}
+
 var reducer = (function (state, action) {
   switch (action.type) {
     case 'UPDATE_LOCATION':
+      // console.log('Update Location')
       return _objectSpread({}, state, {
         currentLocation: action.location,
         prevLocation: _objectSpread({}, state.currentLocation, {
           y: getY(state.currentLocation)
         }),
-        views: [null].concat(_toConsumableArray(state.views))
+        views: [null].concat(_toConsumableArray(filterViews(state.views)))
       });
 
     case 'ADD_QUEUE':
+      // console.log('Add to Queue')
       return _objectSpread({}, state, {
-        views: [null].concat(_toConsumableArray(state.views)),
+        // views: [null, ...filterViews(state.views)],
         queue: action.view
       });
 
     case 'REMOVE_VIEW':
+      // console.log('Remove View')
       return _objectSpread({}, state, {
         views: state.views.filter(function (view) {
-          if (view && view.key === action.pathname) return false;
+          if (view && view.props.location.key === action.locationKey) return false;
           return true;
         })
       });
 
-    case 'ADD_VIEW':
+    case 'ADD_VIEW_FROM_QUEUE':
+      // console.log('Add View from Queue')
       return _objectSpread({}, state, {
-        views: [state.queue].concat(_toConsumableArray(state.views)),
+        views: [state.queue].concat(_toConsumableArray(filterViews(state.views))),
+        // views: state.queue
+        //   ? [state.queue, ...filterViews(state.views)]
+        //   : [...filterViews(state.views)],
         queue: null
+      });
+
+    case 'ADD_VIEW_DIRECTLY':
+      // console.log('Add View directly')
+      return _objectSpread({}, state, {
+        views: [action.view].concat(_toConsumableArray(filterViews(state.views))),
+        queue: null
+      });
+
+    case 'UPDATE_MODE':
+      return _objectSpread({}, state, {
+        mode: action.mode // case 'UPDATE_SPRINGS':
+        //   return {
+        //     ...state,
+        //     enter: action.enter,
+        //     usual: action.usual,
+        //     leave: action.leave
+        //   }
+
       });
 
     default:
@@ -1351,40 +1383,6 @@ TransitionLink.defaultProps = {
   children: null
 };
 
-function validateSpring(spring) {
-  var validated = {};
-  Object.keys(spring).map(function (key) {
-    switch (key) {
-      case 'opacity':
-        if (typeof spring[key] === 'number') {
-          validated[key] = spring[key];
-        }
-
-        break;
-
-      case 'transform':
-        if (spring[key] && typeof spring[key] === 'string') {
-          validated[key] = spring[key];
-        }
-
-        break;
-
-      case 'config':
-        if (typeof spring[key] === 'string') {
-          validated[key] = reactSpring.config[spring[key]] || {};
-        } else {
-          validated[key] = spring[key];
-        }
-
-        break;
-
-      default:
-        validated[key] = spring[key];
-    }
-  });
-  return validated;
-}
-
 var TransitionView = function TransitionView(_ref) {
   var view = _ref.view,
       action = _ref.action;
@@ -1434,13 +1432,14 @@ var TransitionView = function TransitionView(_ref) {
         onRest: function onRest(props) {
           dispatch({
             type: 'REMOVE_VIEW',
-            pathname: view.key
+            locationKey: view.props.location.key
           });
+          console.log(mode);
 
           if (mode === 'successive') {
             window.scrollTo(0, 0);
             dispatch({
-              type: 'ADD_VIEW'
+              type: 'ADD_VIEW_FROM_QUEUE'
             });
           }
 
@@ -1448,7 +1447,7 @@ var TransitionView = function TransitionView(_ref) {
         }
       }));
     }
-  }, [action]);
+  }, [action, mode]);
   return React__default.createElement("div", {
     className: "view-container",
     style: _objectSpread({
@@ -1471,6 +1470,10 @@ var TransitionView = function TransitionView(_ref) {
 
 var TransitionViews = function TransitionViews(_ref) {
   var location = _ref.location,
+      enter = _ref.enter,
+      usual = _ref.usual,
+      leave = _ref.leave,
+      mode = _ref.mode,
       children = _ref.children;
 
   var _useStateContext = useStateContext(),
@@ -1478,12 +1481,29 @@ var TransitionViews = function TransitionViews(_ref) {
       _useStateContext2$ = _useStateContext2[0],
       currentLocation = _useStateContext2$.currentLocation,
       views = _useStateContext2$.views,
-      mode = _useStateContext2$.mode,
-      dispatch = _useStateContext2[1]; // const prevLocation = usePrev(currentLocation)
+      queue = _useStateContext2$.queue,
+      dispatch = _useStateContext2[1]; // const validEnter = useMemo(() => validateSpring(enter), [enter])
+  // const validUsual = useMemo(() => validateSpring(usual), [usual])
+  // const validLeave = useMemo(() => validateSpring(leave), [leave])
 
 
   React.useEffect(function () {
-    if (currentLocation.pathname !== location.pathname) {
+    dispatch({
+      type: 'UPDATE_MODE',
+      mode: mode
+    });
+  }, [mode]); // useEffect(() => {
+  //   dispatch({
+  //     type: 'UPDATE_SPRINGS',
+  //     enter: validateSpring(enter),
+  //     usual: validateSpring(usual),
+  //     leave: validateSpring(leave)
+  //   })
+  //   // console.log('update Springs!')
+  // }, [enter, usual, leave])
+
+  React.useEffect(function () {
+    if (currentLocation.key !== location.key) {
       dispatch({
         type: 'UPDATE_LOCATION',
         location: location
@@ -1491,25 +1511,37 @@ var TransitionViews = function TransitionViews(_ref) {
     }
   }, [location.pathname]);
   React.useEffect(function () {
-    if (currentLocation.pathname !== children.key) {
-      dispatch({
-        type: 'ADD_QUEUE',
-        view: children
-      });
+    if (currentLocation.key === children.props.location.key) return;
 
-      if (mode === 'immediate') {
+    if (mode === 'successive') {
+      if (views.filter(function (view) {
+        return view;
+      }).length && !queue) {
         dispatch({
-          type: 'ADD_VIEW'
+          type: 'ADD_QUEUE',
+          view: children
+        });
+      } else {
+        dispatch({
+          type: 'ADD_VIEW_DIRECTLY',
+          view: children
         });
       }
     }
-  }, [children.key]);
+
+    if (mode === 'immediate') {
+      dispatch({
+        type: 'ADD_VIEW_DIRECTLY',
+        view: children
+      });
+    }
+  }, [children.props.location.pathname]);
   return React__default.createElement("div", {
     className: "views"
   }, views.map(function (view, index) {
     if (!view) return null;
     return React__default.createElement(TransitionView, {
-      key: view.key,
+      key: view.props.location.key,
       view: view,
       action: !index ? 'enter' : 'leave',
       style: {
@@ -1522,33 +1554,59 @@ var TransitionViews = function TransitionViews(_ref) {
   }));
 };
 
-var TransitionProvider = function TransitionProvider(_ref) {
-  var location = _ref.location,
-      mode = _ref.mode,
-      children = _ref.children,
-      enter = _ref.enter,
-      usual = _ref.usual,
-      leave = _ref.leave;
+function validateSpring(spring) {
+  var validated = {};
+  Object.keys(spring).map(function (key) {
+    switch (key) {
+      case 'opacity':
+        if (typeof spring[key] === 'number') {
+          validated[key] = spring[key];
+        }
+
+        break;
+
+      case 'transform':
+        if (spring[key] && typeof spring[key] === 'string') {
+          validated[key] = spring[key];
+        }
+
+        break;
+
+      case 'config':
+        if (typeof spring[key] === 'string') {
+          validated[key] = reactSpring.config[spring[key]] || {};
+        } else {
+          validated[key] = spring[key];
+        }
+
+        break;
+
+      default:
+        validated[key] = spring[key];
+    }
+  });
+  return validated;
+}
+
+var TransitionProvider = function TransitionProvider(props) {
   return React__default.createElement(StateProvider, {
     reducer: reducer,
     initialState: {
-      currentLocation: location,
+      currentLocation: props.location,
       prevLocation: null,
-      views: [children],
+      views: [props.children],
       queue: null,
-      mode: mode,
-      enter: validateSpring(enter),
-      usual: validateSpring(usual),
-      leave: validateSpring(leave)
+      mode: props.mode,
+      enter: validateSpring(props.enter),
+      usual: validateSpring(props.usual),
+      leave: validateSpring(props.leave)
     }
-  }, React__default.createElement(TransitionViews, {
-    location: location
-  }, children));
+  }, React__default.createElement(TransitionViews, props));
 };
 
 TransitionProvider.propTypes = {
   location: propTypes.object,
-  mode: propTypes.string,
+  mode: propTypes.oneOf(['successive', 'immediate']),
   children: propTypes.node,
   enter: propTypes.object,
   leave: propTypes.object
