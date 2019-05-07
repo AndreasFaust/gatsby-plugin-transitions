@@ -1,42 +1,34 @@
 import React from 'react'
 import propTypes from 'prop-types'
 import { StateProvider, reducer } from './state'
-import validateSpring from './utils/validateSpring'
 import Views from './views'
+import validateSpring from './utils/validateSpring'
 
-const TransitionProvider = ({
-  location,
-  mode,
-  children,
-  enter,
-  usual,
-  leave
-}) => {
+const TransitionProvider = (props) => {
   return (
     <StateProvider reducer={reducer} initialState={{
-      currentLocation: location,
+      currentLocation: props.location,
       prevLocation: null,
-      views: [children],
+      views: [props.children],
       queue: null,
-      mode,
-      enter: validateSpring(enter),
-      usual: validateSpring(usual),
-      leave: validateSpring(leave)
+      mode: props.mode,
+      enter: validateSpring(props.enter),
+      usual: validateSpring(props.usual),
+      leave: validateSpring(props.leave)
     }}>
-      <Views location={location}>
-        {children}
-      </Views>
+      <Views {...props} />
     </StateProvider>
   )
 }
 
 TransitionProvider.propTypes = {
   location: propTypes.object,
-  mode: propTypes.string,
+  mode: propTypes.oneOf(['successive', 'immediate']),
   children: propTypes.node,
   enter: propTypes.object,
   leave: propTypes.object
 }
+
 TransitionProvider.defaultProps = {
   mode: 'successive',
   location: {},

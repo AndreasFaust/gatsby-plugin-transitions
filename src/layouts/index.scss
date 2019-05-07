@@ -26,3 +26,17 @@
 .content--2 {
   background-image: linear-gradient(orange, yellow);
 }
+
+.mode {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  color: #ccc;
+}
+.mode__label {
+  margin: 0.5em;
+}
+.mode__select {
+  // width: 200px;
+  // background: #444;
+}

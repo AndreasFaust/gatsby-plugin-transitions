@@ -2,13 +2,32 @@ import React, { useEffect } from 'react'
 import { useStateContext } from './state'
 // import usePrev from './hooks/usePrev'
 import View from './view'
+// import validateSpring from './utils/validateSpring'
 
-const TransitionViews = ({ location, children }) => {
-  const [{ currentLocation, views, mode }, dispatch] = useStateContext()
-  // const prevLocation = usePrev(currentLocation)
+const TransitionViews = ({ location, enter, usual, leave, mode, children }) => {
+  const [{ currentLocation, views, queue }, dispatch] = useStateContext()
+  // const validEnter = useMemo(() => validateSpring(enter), [enter])
+  // const validUsual = useMemo(() => validateSpring(usual), [usual])
+  // const validLeave = useMemo(() => validateSpring(leave), [leave])
+  useEffect(() => {
+    dispatch({
+      type: 'UPDATE_MODE',
+      mode
+    })
+  }, [mode])
+
+  // useEffect(() => {
+  //   dispatch({
+  //     type: 'UPDATE_SPRINGS',
+  //     enter: validateSpring(enter),
+  //     usual: validateSpring(usual),
+  //     leave: validateSpring(leave)
+  //   })
+  //   // console.log('update Springs!')
+  // }, [enter, usual, leave])
 
   useEffect(() => {
-    if (currentLocation.pathname !== location.pathname) {
+    if (currentLocation.key !== location.key) {
       dispatch({
         type: 'UPDATE_LOCATION',
         location
@@ -17,16 +36,18 @@ const TransitionViews = ({ location, children }) => {
   }, [location.pathname])
 
   useEffect(() => {
-    if (currentLocation.pathname !== children.key) {
-      dispatch({
-        type: 'ADD_QUEUE',
-        view: children
-      })
-      if (mode === 'immediate') {
-        dispatch({ type: 'ADD_VIEW' })
+    if (currentLocation.key === children.props.location.key) return
+    if (mode === 'successive') {
+      if (views.filter(view => view).length && !queue) {
+        dispatch({ type: 'ADD_QUEUE', view: children })
+      } else {
+        dispatch({ type: 'ADD_VIEW_DIRECTLY', view: children })
       }
     }
-  }, [children.key])
+    if (mode === 'immediate') {
+      dispatch({ type: 'ADD_VIEW_DIRECTLY', view: children })
+    }
+  }, [children.props.location.pathname])
 
   return (
     <div className='views'>
@@ -34,7 +55,7 @@ const TransitionViews = ({ location, children }) => {
         if (!view) return null
         return (
           <View
-            key={view.key}
+            key={view.props.location.key}
             view={view}
             action={!index ? 'enter' : 'leave'}
             style={{
