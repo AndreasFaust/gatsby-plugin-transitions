@@ -32,7 +32,6 @@ const TransitionView = ({ view, action }) => {
         ...leave,
         onRest: (props) => {
           dispatch({ type: 'REMOVE_VIEW', locationKey: view.props.location.key })
-          console.log(mode)
           if (mode === 'successive') {
             window.scrollTo(0, 0)
             dispatch({ type: 'ADD_VIEW_FROM_QUEUE' })
@@ -41,7 +40,7 @@ const TransitionView = ({ view, action }) => {
         }
       })
     }
-  }, [action, mode])
+  }, [action])
   return (
     <div
       className='view-container'
