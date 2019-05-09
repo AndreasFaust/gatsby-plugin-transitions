@@ -25,7 +25,8 @@ const TransitionView = ({ view, action }) => {
           if (mode === 'immediate') {
             setStyles({
               position: 'relative',
-              transform: 'translate3d(0, 0px, 0)'
+              transform: 'translate3d(0, 0px, 0)',
+              willChange: ''
             })
           }
           if (typeof usual.onRest === 'function') usual.onRest(props)
@@ -52,15 +53,15 @@ const TransitionView = ({ view, action }) => {
       style={{
         width: '100%',
         gridArea: 'View',
-        willChange: 'transform',
         ...styles,
+        willChange: mode === 'immediate' && 'transform',
         top: 0
       }}
     >
       <animated.div
         style={{
           width: '100%',
-          willChange: 'opacity, transform',
+          willChange: `opacity${enter.transform || leave.transform ? ', transform' : ''}`,
           opacity: props.opacity,
           transform: props.transform
         }}

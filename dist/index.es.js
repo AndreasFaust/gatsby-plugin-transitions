@@ -1416,7 +1416,8 @@ var TransitionView = function TransitionView(_ref) {
           if (mode === 'immediate') {
             setStyles({
               position: 'relative',
-              transform: 'translate3d(0, 0px, 0)'
+              transform: 'translate3d(0, 0px, 0)',
+              willChange: ''
             });
           }
 
@@ -1447,15 +1448,15 @@ var TransitionView = function TransitionView(_ref) {
     className: "view-container",
     style: _objectSpread({
       width: '100%',
-      gridArea: 'View',
-      willChange: 'transform'
+      gridArea: 'View'
     }, styles, {
+      willChange: mode === 'immediate' && 'transform',
       top: 0
     })
   }, React.createElement(animated.div, {
     style: {
       width: '100%',
-      willChange: 'opacity, transform',
+      willChange: "opacity".concat(enter.transform || leave.transform ? ', transform' : ''),
       opacity: props.opacity,
       transform: props.transform
     },

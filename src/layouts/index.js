@@ -16,7 +16,7 @@ const Layout = ({
         mode={mode}
         enter={{
           opacity: 0,
-          // transform: 'translate3d(0,10vh,0) scale3d(1, 1, 1)',
+          transform: 'translate3d(0,10vh,0) scale3d(1, 1, 1)',
           config: {
             mass: 1,
             tension: 210,
@@ -30,7 +30,7 @@ const Layout = ({
         }}
         usual={{
           opacity: 1,
-          // transform: 'translate3d(0,0vh,0) scale3d(1, 1, 1)',
+          transform: 'translate3d(0,0vh,0) scale3d(1, 1, 1)',
           config: {
             mass: 1,
             tension: 210,
@@ -41,7 +41,7 @@ const Layout = ({
         }}
         leave={{
           opacity: 0,
-          // transform: 'translate3d(0,-50vh,0) scale3d(10, 10, 1)',
+          transform: 'translate3d(0,-50vh,0) scale3d(10, 10, 1)',
           config: {
             mass: 1,
             tension: 210,
