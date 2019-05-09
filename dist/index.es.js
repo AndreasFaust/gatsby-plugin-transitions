@@ -1390,10 +1390,10 @@ var TransitionView = function TransitionView(_ref) {
       leave = _useStateContext2$.leave,
       dispatch = _useStateContext2[1];
 
-  var _useState = useState({
+  var _useState = useState(mode === 'immediate' ? {
     position: 'fixed',
     transform: "translate3d(0,-".concat(prevLocation && prevLocation.y[1], "px,0)")
-  }),
+  } : {}),
       _useState2 = _slicedToArray(_useState, 2),
       styles = _useState2[0],
       setStyles = _useState2[1];
@@ -1413,10 +1413,13 @@ var TransitionView = function TransitionView(_ref) {
             window.scrollTo(0, 0);
           }
 
-          setStyles({
-            position: 'relative',
-            transform: 'translate3d(0, 0px, 0)'
-          });
+          if (mode === 'immediate') {
+            setStyles({
+              position: 'relative',
+              transform: 'translate3d(0, 0px, 0)'
+            });
+          }
+
           if (typeof usual.onRest === 'function') usual.onRest(props);else if (typeof enter.onRest === 'function') enter.onRest(props);
         }
       }));
