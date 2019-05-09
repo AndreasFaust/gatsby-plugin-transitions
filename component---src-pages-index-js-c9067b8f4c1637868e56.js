@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[2],{75:function(e,n,t){"use strict";t.r(n);var a=t(0),o=t.n(a),l=t(15);n.default=function(e){e.location;return o.a.createElement("div",{className:"content content--1"},o.a.createElement("h1",null,"gatsby-plugin-transitions"),o.a.createElement("p",null,"Transitions are easy."),o.a.createElement("p",null,"Now go build something great."),o.a.createElement(l.a,{to:"/page-2/"},"Go to page 2"))}}}]);
+//# sourceMappingURL=component---src-pages-index-js-c9067b8f4c1637868e56.js.map
