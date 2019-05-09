@@ -1,3 +1,9 @@
+### 1.1.0 (2019-05-09)
+
+##### New Features
+
+*  container position fix only on mode 'immediate' (fade9d4a)
+
 #### 1.0.2 (2019-05-07)
 
 ##### Bug Fixes
