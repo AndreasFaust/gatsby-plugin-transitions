@@ -6,8 +6,6 @@
 
 **This Project is under development. Please join and contribute!**
 
-🔥 **Beware:** Until version 1.0.0 the API can and does change (constantly). Any (breaking-)changes are expressed in minor-updates and will be noted in the docs immediatedly.
-
 ## Install
 
 Install all dependencies via Yarn or NPM.
@@ -83,7 +81,7 @@ You can enter default-springs for all animation-states:
 - `usual`: Normal animation-state of the view.
 - `leave`: To-Values, when the view is leaving.
 
-**Caution:** In react-spring the values of the previous animation persist. For example: If you want to execute a `onRest`-function only on `enter`, you have to overwrite it in `leave`!
+🔥 **Caution:** In react-spring the values of the previous animation persist. For example: If you want to execute a `onRest`-function only on `enter`, you have to overwrite it in `leave`!
 
 #### opacity and transform
 
@@ -127,7 +125,7 @@ export default MyComponent;
 
 Every contribution is very much appreciated.
 
-**If you like gatsby-plugin-transitions, don't hesitate to star it on [GitHub](https://github.com/AndreasFaust/gatsby-plugin-transitions).**
+😍 **If you like gatsby-plugin-transitions, don't hesitate to star it on [GitHub](https://github.com/AndreasFaust/gatsby-plugin-transitions).**
 
 ## License
 
