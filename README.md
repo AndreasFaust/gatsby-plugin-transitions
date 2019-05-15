@@ -127,7 +127,7 @@ export default MyComponent;
 
 Every contribution is very much appreciated.
 
-**If you like react-sled, don't hesitate to star it on [GitHub](https://github.com/AndreasFaust/gatsby-plugin-transitions).**
+**If you like gatsby-plugin-transitions, don't hesitate to star it on [GitHub](https://github.com/AndreasFaust/gatsby-plugin-transitions).**
 
 ## License
 
