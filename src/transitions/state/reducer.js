@@ -21,7 +21,8 @@ export default (state, action) => {
           ...state.currentLocation,
           y: getY(state.currentLocation)
         },
-        views: [null, ...filterViews(state.views)]
+        views: [null, ...filterViews(state.views)],
+        hasEntered: false
       }
     case 'ADD_QUEUE':
       // console.log('Add to Queue')
@@ -60,6 +61,11 @@ export default (state, action) => {
       return {
         ...state,
         mode: action.mode
+      }
+    case 'HAS_ENTERED':
+      return {
+        ...state,
+        hasEntered: true
       }
     // case 'UPDATE_SPRINGS':
     //   return {

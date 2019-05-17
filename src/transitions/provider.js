@@ -14,7 +14,8 @@ const TransitionProvider = (props) => {
       mode: props.mode,
       enter: validateSpring(props.enter),
       usual: validateSpring(props.usual),
-      leave: validateSpring(props.leave)
+      leave: validateSpring(props.leave),
+      hasEntered: false
     }}>
       <Views {...props} />
     </StateProvider>

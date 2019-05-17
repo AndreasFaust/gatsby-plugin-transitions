@@ -21,8 +21,6 @@ const TransitionView = ({ view, action }) => {
         onRest: (props) => {
           if (mode === 'immediate') {
             window.scrollTo(0, 0)
-          }
-          if (mode === 'immediate') {
             setStyles({
               position: 'relative',
               transform: 'translate3d(0, 0px, 0)',
@@ -31,6 +29,7 @@ const TransitionView = ({ view, action }) => {
           }
           if (typeof usual.onRest === 'function') usual.onRest(props)
           else if (typeof enter.onRest === 'function') enter.onRest(props)
+          dispatch({ type: 'HAS_ENTERED' })
         }
       })
     } else {
