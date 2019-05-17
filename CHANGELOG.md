@@ -1,3 +1,13 @@
+### 1.2.0 (2019-05-17)
+
+##### Documentation Changes
+
+*  fix project name (608c19cc)
+
+##### New Features
+
+*  Add hasEntered to state. (4f1db844)
+
 #### 1.1.1 (2019-05-09)
 
 ##### Bug Fixes
