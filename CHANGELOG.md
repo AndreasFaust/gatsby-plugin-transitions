@@ -1,3 +1,9 @@
+### 1.3.0 (2019-05-23)
+
+##### New Features
+
+*  Finalize keep-feature. (2c654590)
+
 ### 1.2.0 (2019-05-17)
 
 ##### Documentation Changes
