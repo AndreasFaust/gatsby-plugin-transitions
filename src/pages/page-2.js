@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'gatsby'
-import { useTransitionStore } from '../transitions'
+import { Link, navigate } from 'gatsby'
+// import { useTransitionStore } from '../transitions'
 
 const SecondPage = ({ location }) => {
-  const [, dispatch] = useTransitionStore()
+  // const [, dispatch] = useTransitionStore()
   useEffect(() => {
     function onScroll () {
       if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 2) {
-        dispatch({ type: 'RETURN_TO_KEPT' })
+        // dispatch({ type: 'RETURN_TO_KEPT' })
+        window.setTimeout(() => {
+          navigate('/')
+        }, 500)
       }
     }
     window.addEventListener('scroll', onScroll)

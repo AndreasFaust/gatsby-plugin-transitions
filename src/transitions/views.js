@@ -2,19 +2,12 @@ import React, { useEffect } from 'react'
 import { useStateContext } from './state'
 // import usePrev from './hooks/usePrev'
 import View from './view'
+import Keep from './keep'
 
 // import validateSpring from './utils/validateSpring'
 
-function getAction (index, view) {
-  if (view.revive) return 'revive'
-  if (view.wait) return 'wait'
-  if (view.keep) return 'stay'
-  if (!index) return 'enter'
-  return 'leave'
-}
-
 const TransitionViews = ({ location, enter, usual, leave, mode, children }) => {
-  const [{ currentLocation, views, queue }, dispatch] = useStateContext()
+  const [{ currentLocation, views, queue, keep }, dispatch] = useStateContext()
   // const validEnter = useMemo(() => validateSpring(enter), [enter])
   // const validUsual = useMemo(() => validateSpring(usual), [usual])
   // const validLeave = useMemo(() => validateSpring(leave), [leave])
@@ -25,18 +18,15 @@ const TransitionViews = ({ location, enter, usual, leave, mode, children }) => {
     })
   }, [mode])
 
-  // useEffect(() => {
-  //   dispatch({
-  //     type: 'UPDATE_SPRINGS',
-  //     enter: validateSpring(enter),
-  //     usual: validateSpring(usual),
-  //     leave: validateSpring(leave)
-  //   })
-  //   // console.log('update Springs!')
-  // }, [enter, usual, leave])
+  useEffect(() => {
+    function onScroll () {
+      console.log(window.scrollY)
+    }
+    window.addEventListener('scroll', onScroll)
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   useEffect(() => {
-    if (location.state && location.state.ignore) return
     if (currentLocation.key === location.key) return
     dispatch({
       type: 'UPDATE_LOCATION',
@@ -45,16 +35,13 @@ const TransitionViews = ({ location, enter, usual, leave, mode, children }) => {
   }, [location.pathname])
 
   useEffect(() => {
-    // if (children.props.location.state && children.props.location.state.ignore) return
     if (currentLocation.key === children.props.location.key) return
 
     if (mode === 'successive') {
       if (views.filter(view => view).length && !queue) {
         dispatch({ type: 'ADD_QUEUE', view: children })
-        // console.log('ADD_QUEUE!')
       } else {
         dispatch({ type: 'ADD_VIEW_DIRECTLY', view: children })
-        // console.log('ADD_VIEW_DIRECTLY!')
       }
     }
     if (mode === 'immediate') {
@@ -63,34 +50,30 @@ const TransitionViews = ({ location, enter, usual, leave, mode, children }) => {
   }, [children.props.location.pathname])
 
   return (
-    <div className='views'>}
+    <div className='views'>
       {views.map((view, index) => {
-        console.log(view)
         if (!view) return null
+        const isKeep = keep && keep.props.location.pathname === view.props.location.pathname
         return (
           <View
             key={view.props.location.key}
             view={view}
-            action={getAction(index, view)}
-            style={{
-              width: '100%',
-              overflow: 'hidden',
-              display: 'grid',
-              gridTemplateAreas: 'View'
-            }}
+            isKeep={isKeep}
+            skipEnterAnimation={isKeep}
+            skipLeaveAnimation={isKeep}
+            y={isKeep ? keep.y : 0}
+            action={!index ? 'enter' : 'leave'}
           />
         )
       })}
+      {keep && (
+        <Keep
+          key={keep.props.location.key}
+          view={keep}
+        />
+      )}
     </div>
   )
 }
 
 export default TransitionViews
-// export default React.memo(TransitionViews, (prevProps, nextProps) => {
-//   console.log(prevProps.location.key)
-//   console.log(nextProps.location.key)
-//   if (prevProps.location.key !== nextProps.location.key) return true
-//   if (prevProps.children.props.location.key !== nextProps.children.props.location.key) return true
-//   if (prevProps.mode !== nextProps.mode) return true
-//   return false
-// })

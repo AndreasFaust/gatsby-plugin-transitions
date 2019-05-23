@@ -1,33 +1,41 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useStateContext } from './state'
 import { useSpring, animated } from 'react-spring'
-import { navigate } from 'gatsby'
 
-const TransitionView = ({ view, action }) => {
+const TransitionView = ({ view, action, y, isKeep, skipEnterAnimation, skipLeaveAnimation }) => {
   const [{ prevLocation, mode, enter, usual, leave }, dispatch] = useStateContext()
-  const [styles, setStyles] = useState(mode === 'immediate'
-    ? {
-      position: 'fixed',
-      transform: `translate3d(0,-${prevLocation && prevLocation.y[1]}px,0)`
+  const [styles, setStyles] = useState(() => {
+    if (mode === 'immediate') {
+      return {
+        position: 'fixed',
+        transform: `translate3d(0,-${prevLocation && prevLocation.y[1]}px,0)`
+      }
     }
-    : {}
-  )
-  const y = useRef(0)
-  // const wasRevived = useRef(false)
-  const [props, set] = useSpring(() => ({
-    ...enter
-  }))
+    if (isKeep) {
+      return { opacity: 0 }
+    }
+    return {}
+  })
+  const [props, set] = useSpring(() => {
+    return skipEnterAnimation
+      ? usual
+      : enter
+  })
   useEffect(() => {
-    console.log(view.props.location.pathname)
     switch (action) {
-      case 'wait':
-        console.log('WAIT!')
-        break
       case 'enter':
-        console.log('ENTER!')
         set({
           ...usual,
+          onStart: () => {
+            if (isKeep) {
+              window.scrollTo(0, y)
+            }
+          },
           onRest: (props) => {
+            if (isKeep) {
+              dispatch({ type: 'REMOVE_KEEP' })
+              setStyles({ opacity: 1 })
+            }
             if (mode === 'immediate') {
               window.scrollTo(0, 0)
               setStyles({
@@ -44,55 +52,29 @@ const TransitionView = ({ view, action }) => {
         break
 
       case 'leave':
-        console.log('LEAVE!')
+        if (skipLeaveAnimation) {
+          dispatch({ type: 'REMOVE_VIEW', locationKey: view.props.location.key })
+          if (mode === 'successive') {
+            window.scrollTo(0, 0)
+            dispatch({ type: 'ADD_VIEW_FROM_QUEUE' })
+          }
+          return
+        }
         set({
           ...leave,
           onRest: (props) => {
             dispatch({ type: 'REMOVE_VIEW', locationKey: view.props.location.key })
             if (mode === 'successive') {
-              if (view.leaveForKept) {
-                dispatch({ type: 'REVIVE_KEPT' })
-              } else {
-                window.scrollTo(0, 0)
-                dispatch({ type: 'ADD_VIEW_FROM_QUEUE' })
-              }
+              window.scrollTo(0, 0)
+              dispatch({ type: 'ADD_VIEW_FROM_QUEUE' })
             }
             if (typeof leave.onRest === 'function') leave.onRest(props)
           }
         })
         break
-
-      case 'stay':
-        console.log('STAY!')
-        y.current = window.scrollY
-        setStyles({
-          position: 'fixed',
-          transform: `translate3d(0,-${y.current}px,0)`,
-          zIndex: -1
-        })
-        window.scrollTo(0, 0)
-        dispatch({ type: 'ADD_VIEW_FROM_QUEUE' })
-        break
-
-      case 'revive':
-        console.log('REVIVE!')
-        setStyles({
-          position: 'relative',
-          transform: 'translate3d(0, 0px, 0)',
-          willChange: '',
-          zIndex: -1
-        })
-        // wasRevived.current = true
-        // dispatch({ type: 'IS_REVIVED' })
-        navigate(view.props.location.pathname, { state: { ignore: true } })
     }
   }, [action])
 
-  useEffect(() => {
-    if (styles.position === 'relative') {
-      window.scrollTo(0, y.current)
-    }
-  }, [styles.position])
   return (
     <div
       className='view-container'
@@ -100,6 +82,7 @@ const TransitionView = ({ view, action }) => {
         width: '100%',
         gridArea: 'View',
         willChange: mode === 'immediate' && 'transform',
+        gridTemplateAreas: 'View',
         top: 0,
         ...styles
       }}

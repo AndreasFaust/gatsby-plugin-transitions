@@ -10,26 +10,6 @@ function filterViews (views) {
   return views.filter(view => view)
 }
 
-function keepView (views, location) {
-  if (!location.state.keep) {
-    return views
-      .filter(view => !view.keep)
-      .map(view => {
-        return view.revive
-          ? { ...view, revive: false }
-          : view
-      })
-  }
-
-  return views
-    .filter(view => !view.keep)
-    .map((view, index) => {
-      return index === 0
-        ? { ...view, keep: true }
-        : view
-    })
-}
-
 export default (state, action) => {
   switch (action.type) {
     case 'UPDATE_LOCATION':
@@ -40,7 +20,10 @@ export default (state, action) => {
           ...state.currentLocation,
           y: getY(state.currentLocation)
         },
-        views: [null, ...keepView(filterViews(state.views), action.location)],
+        views: [null, ...filterViews(state.views)],
+        keep: action.location.state.keep
+          ? { ...state.views[0], y: getY(state.currentLocation) }
+          : state.keep,
         hasEntered: false
       }
     case 'ADD_QUEUE':
@@ -78,34 +61,19 @@ export default (state, action) => {
         ...state,
         hasEntered: true
       }
-    case 'RETURN_TO_KEPT':
-      const keptViewArray = state.views
-        .filter(view => view.keep)
-        .map(view => ({ ...view, wait: true, keep: false }))
+    case 'REMOVE_KEEP':
       return {
         ...state,
-        views: [
-          ...keptViewArray,
-          ...state.views.filter(view => !view.keep).map(view => ({ ...view, leaveForKept: true }))
-        ]
+        keep: null
       }
-    case 'REVIVE_KEPT':
-      return {
-        ...state,
-        views: state.views.map(view => ({
-          ...view,
-          revive: true,
-          keep: false,
-          wait: false
-        }))
-      }
-    // case 'UPDATE_SPRINGS':
-    //   return {
-    //     ...state,
-    //     enter: action.enter,
-    //     usual: action.usual,
-    //     leave: action.leave
-    //   }
+
+      // case 'RETURN_TO_KEPT':
+      //   return {
+      //     ...state,
+      //     views: [state.keep, ...filterViews(state.views)],
+      //     keep: null
+      //   }
+
     default: return state
   }
 }
