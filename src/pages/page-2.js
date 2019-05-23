@@ -19,9 +19,11 @@ const SecondPage = ({ location }) => {
 
   return (
     <div className='content content--2'>
-      <h1>Hi from the second page</h1>
-      <p>Welcome to page 2</p>
-      <Link to='/'>Back to Home</Link>
+      <div className='content__inner'>
+        <h1>Hi from the second page</h1>
+        <p>Welcome to page 2</p>
+        <Link to='/'>Back to Home</Link>
+      </div>
     </div>
   )
 }

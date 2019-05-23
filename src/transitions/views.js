@@ -1,10 +1,8 @@
 import React, { useEffect } from 'react'
 import { useStateContext } from './state'
-// import usePrev from './hooks/usePrev'
+
 import View from './view'
 import Keep from './keep'
-
-// import validateSpring from './utils/validateSpring'
 
 const TransitionViews = ({ location, enter, usual, leave, mode, children }) => {
   const [{ currentLocation, views, queue, keep }, dispatch] = useStateContext()
@@ -15,14 +13,6 @@ const TransitionViews = ({ location, enter, usual, leave, mode, children }) => {
       mode
     })
   }, [mode])
-
-  // useEffect(() => {
-  //   function onScroll () {
-  //     console.log(window.scrollY)
-  //   }
-  //   window.addEventListener('scroll', onScroll)
-  //   return () => window.removeEventListener('scroll', onScroll)
-  // }, [])
 
   useEffect(() => {
     if (currentLocation.key === location.key) return

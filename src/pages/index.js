@@ -7,10 +7,12 @@ const IndexPage = ({ location }) => (
   //   location={location}
   // >
   <div className='content content--1'>
-    <h1>gatsby-plugin-transitions</h1>
-    <p>Transitions are easy.</p>
-    <p>Now go build something great.</p>
-    <Link to='/page-2/' state={{ keep: true }}>Go to page 2</Link>
+    <div className='content__inner'>
+      <h1>gatsby-plugin-transitions</h1>
+      <p>Transitions are easy.</p>
+      <p>Now go build something great.</p>
+      <Link to='/page-2/' state={{ keep: true }}>Go to page 2</Link>
+    </div>
   </div>
   // </Transition>
 )

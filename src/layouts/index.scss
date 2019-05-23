@@ -14,17 +14,20 @@
 }
 
 .content {
-  min-height: 150vh;
+  min-height: 200vh;
+}
+.content__inner {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  height: 150vh;
 }
 .content--1 {
   background-image: linear-gradient(blue, lightblue);
 }
 .content--2 {
-  background-image: linear-gradient(orange, yellow);
+  background-image: linear-gradient(orange, yellow 50%, transparent 100%);
 }
 .content--3 {
   background-image: linear-gradient(green, coral);
