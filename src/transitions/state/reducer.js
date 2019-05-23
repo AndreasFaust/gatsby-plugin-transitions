@@ -10,10 +10,29 @@ function filterViews (views) {
   return views.filter(view => view)
 }
 
+function keepView (views, location) {
+  if (!location.state.keep) {
+    return views
+      .filter(view => !view.keep)
+      .map(view => {
+        return view.revive
+          ? { ...view, revive: false }
+          : view
+      })
+  }
+
+  return views
+    .filter(view => !view.keep)
+    .map((view, index) => {
+      return index === 0
+        ? { ...view, keep: true }
+        : view
+    })
+}
+
 export default (state, action) => {
   switch (action.type) {
     case 'UPDATE_LOCATION':
-      // console.log('Update Location')
       return {
         ...state,
         currentLocation: action.location,
@@ -21,18 +40,15 @@ export default (state, action) => {
           ...state.currentLocation,
           y: getY(state.currentLocation)
         },
-        views: [null, ...filterViews(state.views)],
+        views: [null, ...keepView(filterViews(state.views), action.location)],
         hasEntered: false
       }
     case 'ADD_QUEUE':
-      // console.log('Add to Queue')
       return {
         ...state,
-        // views: [null, ...filterViews(state.views)],
         queue: action.view
       }
     case 'REMOVE_VIEW':
-      // console.log('Remove View')
       return {
         ...state,
         views: state.views.filter(view => {
@@ -41,17 +57,12 @@ export default (state, action) => {
         })
       }
     case 'ADD_VIEW_FROM_QUEUE':
-      // console.log('Add View from Queue')
       return {
         ...state,
         views: [state.queue, ...filterViews(state.views)],
-        // views: state.queue
-        //   ? [state.queue, ...filterViews(state.views)]
-        //   : [...filterViews(state.views)],
         queue: null
       }
     case 'ADD_VIEW_DIRECTLY':
-      // console.log('Add View directly')
       return {
         ...state,
         views: [action.view, ...filterViews(state.views)],
@@ -66,6 +77,27 @@ export default (state, action) => {
       return {
         ...state,
         hasEntered: true
+      }
+    case 'RETURN_TO_KEPT':
+      const keptViewArray = state.views
+        .filter(view => view.keep)
+        .map(view => ({ ...view, wait: true, keep: false }))
+      return {
+        ...state,
+        views: [
+          ...keptViewArray,
+          ...state.views.filter(view => !view.keep).map(view => ({ ...view, leaveForKept: true }))
+        ]
+      }
+    case 'REVIVE_KEPT':
+      return {
+        ...state,
+        views: state.views.map(view => ({
+          ...view,
+          revive: true,
+          keep: false,
+          wait: false
+        }))
       }
     // case 'UPDATE_SPRINGS':
     //   return {
