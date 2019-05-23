@@ -1339,7 +1339,11 @@ var useStateContext = function useStateContext() {
 
 var TransitionView = function TransitionView(_ref) {
   var view = _ref.view,
+      mode = _ref.mode,
       action = _ref.action,
+      enter = _ref.enter,
+      leave = _ref.leave,
+      usual = _ref.usual,
       y = _ref.y,
       isKeep = _ref.isKeep,
       skipEnterAnimation = _ref.skipEnterAnimation,
@@ -1347,12 +1351,7 @@ var TransitionView = function TransitionView(_ref) {
 
   var _useStateContext = useStateContext(),
       _useStateContext2 = _slicedToArray(_useStateContext, 2),
-      _useStateContext2$ = _useStateContext2[0],
-      prevLocation = _useStateContext2$.prevLocation,
-      mode = _useStateContext2$.mode,
-      enter = _useStateContext2$.enter,
-      usual = _useStateContext2$.usual,
-      leave = _useStateContext2$.leave,
+      prevLocation = _useStateContext2[0].prevLocation,
       dispatch = _useStateContext2[1];
 
   var _useState = React.useState(function () {
@@ -1387,7 +1386,7 @@ var TransitionView = function TransitionView(_ref) {
       case 'enter':
         set(_objectSpread({}, usual, {
           onStart: function onStart() {
-            if (isKeep) {
+            if (mode === 'successive' || isKeep) {
               window.scrollTo(0, y);
             }
           },
@@ -1402,7 +1401,7 @@ var TransitionView = function TransitionView(_ref) {
             }
 
             if (mode === 'immediate') {
-              window.scrollTo(0, 0);
+              window.scrollTo(0, y);
               setStyles({
                 position: 'relative',
                 transform: 'translate3d(0, 0px, 0)',
@@ -1436,6 +1435,8 @@ var TransitionView = function TransitionView(_ref) {
         }
 
         set(_objectSpread({}, leave, {
+          onStart: function onStart() {},
+          // overwrite enter animation
           onRest: function onRest(props) {
             dispatch({
               type: 'REMOVE_VIEW',
@@ -1443,7 +1444,7 @@ var TransitionView = function TransitionView(_ref) {
             });
 
             if (mode === 'successive') {
-              window.scrollTo(0, 0);
+              // window.scrollTo(0, 0)
               dispatch({
                 type: 'ADD_VIEW_FROM_QUEUE'
               });
@@ -1492,13 +1493,23 @@ var TransitionKeep = function TransitionKeep(_ref) {
   }, view));
 };
 
-var TransitionViews = function TransitionViews(_ref) {
-  var location = _ref.location,
-      enter = _ref.enter,
-      usual = _ref.usual,
-      leave = _ref.leave,
-      mode = _ref.mode,
-      children = _ref.children;
+function getY$1(_ref) {
+  var view = _ref.view,
+      keep = _ref.keep,
+      currentLocation = _ref.currentLocation;
+  var isKeep = keep && keep.props.location.pathname === view.props.location.pathname;
+  if (isKeep) return keep.y;
+  if (currentLocation && currentLocation.state && currentLocation.state.y) return currentLocation.state.y;
+  return 0;
+}
+
+var TransitionViews = function TransitionViews(_ref2) {
+  var location = _ref2.location,
+      enter = _ref2.enter,
+      usual = _ref2.usual,
+      leave = _ref2.leave,
+      mode = _ref2.mode,
+      children = _ref2.children;
 
   var _useStateContext = useStateContext(),
       _useStateContext2 = _slicedToArray(_useStateContext, 2),
@@ -1523,6 +1534,8 @@ var TransitionViews = function TransitionViews(_ref) {
     });
   }, [location.pathname]);
   React.useEffect(function () {
+    // const currentMode = (currentLocation && currentLocation.state && currentLocation.state.mode) || mode
+    // console.log(currentMode)
     if (currentLocation.key === children.props.location.key) return;
 
     if (mode === 'successive') {
@@ -1556,10 +1569,18 @@ var TransitionViews = function TransitionViews(_ref) {
     return React__default.createElement(TransitionView, {
       key: view.props.location.key,
       view: view,
+      enter: currentLocation && currentLocation.state && currentLocation.state.enter || enter,
+      leave: currentLocation && currentLocation.state && currentLocation.state.leave || leave,
+      usual: currentLocation && currentLocation.state && currentLocation.state.usual || usual,
+      mode: mode,
       isKeep: isKeep,
       skipEnterAnimation: isKeep,
       skipLeaveAnimation: isKeep,
-      y: isKeep ? keep.y : 0,
+      y: getY$1({
+        keep: keep,
+        view: view,
+        currentLocation: currentLocation
+      }),
       action: !index ? 'enter' : 'leave'
     });
   }), keep && React__default.createElement(TransitionKeep, {

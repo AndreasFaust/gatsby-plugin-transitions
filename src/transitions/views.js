@@ -4,6 +4,13 @@ import { useStateContext } from './state'
 import View from './view'
 import Keep from './keep'
 
+function getY ({ view, keep, currentLocation }) {
+  const isKeep = keep && keep.props.location.pathname === view.props.location.pathname
+  if (isKeep) return keep.y
+  if (currentLocation && currentLocation.state && currentLocation.state.y) return currentLocation.state.y
+  return 0
+}
+
 const TransitionViews = ({ location, enter, usual, leave, mode, children }) => {
   const [{ currentLocation, views, queue, keep }, dispatch] = useStateContext()
 
@@ -23,6 +30,8 @@ const TransitionViews = ({ location, enter, usual, leave, mode, children }) => {
   }, [location.pathname])
 
   useEffect(() => {
+    // const currentMode = (currentLocation && currentLocation.state && currentLocation.state.mode) || mode
+    // console.log(currentMode)
     if (currentLocation.key === children.props.location.key) return
 
     if (mode === 'successive') {
@@ -46,10 +55,14 @@ const TransitionViews = ({ location, enter, usual, leave, mode, children }) => {
           <View
             key={view.props.location.key}
             view={view}
+            enter={(currentLocation && currentLocation.state && currentLocation.state.enter) || enter}
+            leave={(currentLocation && currentLocation.state && currentLocation.state.leave) || leave}
+            usual={(currentLocation && currentLocation.state && currentLocation.state.usual) || usual}
+            mode={mode}
             isKeep={isKeep}
             skipEnterAnimation={isKeep}
             skipLeaveAnimation={isKeep}
-            y={isKeep ? keep.y : 0}
+            y={getY({ keep, view, currentLocation })}
             action={!index ? 'enter' : 'leave'}
           />
         )

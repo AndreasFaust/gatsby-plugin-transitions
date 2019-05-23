@@ -22,7 +22,7 @@ const SecondPage = ({ location }) => {
       <div className='content__inner'>
         <h1>Hi from the second page</h1>
         <p>Welcome to page 2</p>
-        <Link to='/'>Back to Home</Link>
+        <Link to='/' state={{ y: 500 }}>Back to Home</Link>
       </div>
     </div>
   )

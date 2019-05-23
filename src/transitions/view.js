@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { useStateContext } from './state'
 import { useSpring, animated } from 'react-spring'
 
-const TransitionView = ({ view, action, y, isKeep, skipEnterAnimation, skipLeaveAnimation }) => {
-  const [{ prevLocation, mode, enter, usual, leave }, dispatch] = useStateContext()
+const TransitionView = ({
+  view, mode, action, enter, leave, usual, y, isKeep, skipEnterAnimation, skipLeaveAnimation
+}) => {
+  const [{ prevLocation }, dispatch] = useStateContext()
   const [styles, setStyles] = useState(() => {
     if (mode === 'immediate') {
       return {
@@ -27,7 +29,7 @@ const TransitionView = ({ view, action, y, isKeep, skipEnterAnimation, skipLeave
         set({
           ...usual,
           onStart: () => {
-            if (isKeep) {
+            if (mode === 'successive' || isKeep) {
               window.scrollTo(0, y)
             }
           },
@@ -37,7 +39,7 @@ const TransitionView = ({ view, action, y, isKeep, skipEnterAnimation, skipLeave
               setStyles({ opacity: 1 })
             }
             if (mode === 'immediate') {
-              window.scrollTo(0, 0)
+              window.scrollTo(0, y)
               setStyles({
                 position: 'relative',
                 transform: 'translate3d(0, 0px, 0)',
@@ -62,10 +64,11 @@ const TransitionView = ({ view, action, y, isKeep, skipEnterAnimation, skipLeave
         }
         set({
           ...leave,
+          onStart: () => {}, // overwrite enter animation
           onRest: (props) => {
             dispatch({ type: 'REMOVE_VIEW', locationKey: view.props.location.key })
             if (mode === 'successive') {
-              window.scrollTo(0, 0)
+              // window.scrollTo(0, 0)
               dispatch({ type: 'ADD_VIEW_FROM_QUEUE' })
             }
             if (typeof leave.onRest === 'function') leave.onRest(props)
