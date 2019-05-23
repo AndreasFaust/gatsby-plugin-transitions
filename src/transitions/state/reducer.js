@@ -13,7 +13,6 @@ function filterViews (views) {
 export default (state, action) => {
   switch (action.type) {
     case 'UPDATE_LOCATION':
-      // console.log('Update Location')
       return {
         ...state,
         currentLocation: action.location,
@@ -25,14 +24,11 @@ export default (state, action) => {
         hasEntered: false
       }
     case 'ADD_QUEUE':
-      // console.log('Add to Queue')
       return {
         ...state,
-        // views: [null, ...filterViews(state.views)],
         queue: action.view
       }
     case 'REMOVE_VIEW':
-      // console.log('Remove View')
       return {
         ...state,
         views: state.views.filter(view => {
@@ -41,17 +37,12 @@ export default (state, action) => {
         })
       }
     case 'ADD_VIEW_FROM_QUEUE':
-      // console.log('Add View from Queue')
       return {
         ...state,
         views: [state.queue, ...filterViews(state.views)],
-        // views: state.queue
-        //   ? [state.queue, ...filterViews(state.views)]
-        //   : [...filterViews(state.views)],
         queue: null
       }
     case 'ADD_VIEW_DIRECTLY':
-      // console.log('Add View directly')
       return {
         ...state,
         views: [action.view, ...filterViews(state.views)],
@@ -67,13 +58,6 @@ export default (state, action) => {
         ...state,
         hasEntered: true
       }
-    // case 'UPDATE_SPRINGS':
-    //   return {
-    //     ...state,
-    //     enter: action.enter,
-    //     usual: action.usual,
-    //     leave: action.leave
-    //   }
     default: return state
   }
 }

@@ -6,25 +6,13 @@ import View from './view'
 
 const TransitionViews = ({ location, enter, usual, leave, mode, children }) => {
   const [{ currentLocation, views, queue }, dispatch] = useStateContext()
-  // const validEnter = useMemo(() => validateSpring(enter), [enter])
-  // const validUsual = useMemo(() => validateSpring(usual), [usual])
-  // const validLeave = useMemo(() => validateSpring(leave), [leave])
+
   useEffect(() => {
     dispatch({
       type: 'UPDATE_MODE',
       mode
     })
   }, [mode])
-
-  // useEffect(() => {
-  //   dispatch({
-  //     type: 'UPDATE_SPRINGS',
-  //     enter: validateSpring(enter),
-  //     usual: validateSpring(usual),
-  //     leave: validateSpring(leave)
-  //   })
-  //   // console.log('update Springs!')
-  // }, [enter, usual, leave])
 
   useEffect(() => {
     if (currentLocation.key !== location.key) {
