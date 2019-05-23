@@ -2,10 +2,12 @@ import React, { useEffect } from 'react'
 import { useStateContext } from './state'
 // import usePrev from './hooks/usePrev'
 import View from './view'
+import Keep from './keep'
+
 // import validateSpring from './utils/validateSpring'
 
 const TransitionViews = ({ location, enter, usual, leave, mode, children }) => {
-  const [{ currentLocation, views, queue }, dispatch] = useStateContext()
+  const [{ currentLocation, views, queue, keep }, dispatch] = useStateContext()
 
   useEffect(() => {
     dispatch({
@@ -14,17 +16,25 @@ const TransitionViews = ({ location, enter, usual, leave, mode, children }) => {
     })
   }, [mode])
 
+  // useEffect(() => {
+  //   function onScroll () {
+  //     console.log(window.scrollY)
+  //   }
+  //   window.addEventListener('scroll', onScroll)
+  //   return () => window.removeEventListener('scroll', onScroll)
+  // }, [])
+
   useEffect(() => {
-    if (currentLocation.key !== location.key) {
-      dispatch({
-        type: 'UPDATE_LOCATION',
-        location
-      })
-    }
+    if (currentLocation.key === location.key) return
+    dispatch({
+      type: 'UPDATE_LOCATION',
+      location
+    })
   }, [location.pathname])
 
   useEffect(() => {
     if (currentLocation.key === children.props.location.key) return
+
     if (mode === 'successive') {
       if (views.filter(view => view).length && !queue) {
         dispatch({ type: 'ADD_QUEUE', view: children })
@@ -41,20 +51,25 @@ const TransitionViews = ({ location, enter, usual, leave, mode, children }) => {
     <div className='views'>
       {views.map((view, index) => {
         if (!view) return null
+        const isKeep = keep && keep.props.location.pathname === view.props.location.pathname
         return (
           <View
             key={view.props.location.key}
             view={view}
+            isKeep={isKeep}
+            skipEnterAnimation={isKeep}
+            skipLeaveAnimation={isKeep}
+            y={isKeep ? keep.y : 0}
             action={!index ? 'enter' : 'leave'}
-            style={{
-              width: '100%',
-              overflow: 'hidden',
-              display: 'grid',
-              gridTemplateAreas: 'View'
-            }}
           />
         )
       })}
+      {keep && (
+        <Keep
+          key={keep.props.location.key}
+          view={keep}
+        />
+      )}
     </div>
   )
 }

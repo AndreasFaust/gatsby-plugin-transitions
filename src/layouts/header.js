@@ -52,6 +52,9 @@ const Header = ({ setMode }) => {
       <Link to='/page-2' className='header__link'>
         Page-2
       </Link>
+      <Link to='/page-3' className='header__link'>
+        Page-3
+      </Link>
       <div className='mode'>
         <label className='mode__label'>mode: </label>
         <Select

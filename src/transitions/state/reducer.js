@@ -21,6 +21,9 @@ export default (state, action) => {
           y: getY(state.currentLocation)
         },
         views: [null, ...filterViews(state.views)],
+        keep: action.location.state.keep
+          ? { ...state.views[0], y: getY(state.currentLocation) }
+          : state.keep,
         hasEntered: false
       }
     case 'ADD_QUEUE':
@@ -57,6 +60,11 @@ export default (state, action) => {
       return {
         ...state,
         hasEntered: true
+      }
+    case 'REMOVE_KEEP':
+      return {
+        ...state,
+        keep: null
       }
     default: return state
   }
