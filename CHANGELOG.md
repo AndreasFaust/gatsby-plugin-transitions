@@ -1,3 +1,9 @@
+### 1.4.0 (2019-05-23)
+
+##### New Features
+
+*  Add custom y-position. (b64fac21)
+
 #### 1.3.1 (2019-05-23)
 
 ##### Bug Fixes
