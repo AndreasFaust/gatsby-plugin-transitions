@@ -1259,24 +1259,24 @@ function filterViews(views) {
 var reducer = (function (state, action) {
   switch (action.type) {
     case 'UPDATE_LOCATION':
-      // console.log('Update Location')
       return _objectSpread({}, state, {
         currentLocation: action.location,
         prevLocation: _objectSpread({}, state.currentLocation, {
           y: getY(state.currentLocation)
         }),
-        views: [null].concat(_toConsumableArray(filterViews(state.views)))
+        views: [null].concat(_toConsumableArray(filterViews(state.views))),
+        keep: action.location.state.keep ? _objectSpread({}, state.views[0], {
+          y: getY(state.currentLocation)
+        }) : state.keep,
+        hasEntered: false
       });
 
     case 'ADD_QUEUE':
-      // console.log('Add to Queue')
       return _objectSpread({}, state, {
-        // views: [null, ...filterViews(state.views)],
         queue: action.view
       });
 
     case 'REMOVE_VIEW':
-      // console.log('Remove View')
       return _objectSpread({}, state, {
         views: state.views.filter(function (view) {
           if (view && view.props.location.key === action.locationKey) return false;
@@ -1285,17 +1285,12 @@ var reducer = (function (state, action) {
       });
 
     case 'ADD_VIEW_FROM_QUEUE':
-      // console.log('Add View from Queue')
       return _objectSpread({}, state, {
         views: [state.queue].concat(_toConsumableArray(filterViews(state.views))),
-        // views: state.queue
-        //   ? [state.queue, ...filterViews(state.views)]
-        //   : [...filterViews(state.views)],
         queue: null
       });
 
     case 'ADD_VIEW_DIRECTLY':
-      // console.log('Add View directly')
       return _objectSpread({}, state, {
         views: [action.view].concat(_toConsumableArray(filterViews(state.views))),
         queue: null
@@ -1303,14 +1298,17 @@ var reducer = (function (state, action) {
 
     case 'UPDATE_MODE':
       return _objectSpread({}, state, {
-        mode: action.mode // case 'UPDATE_SPRINGS':
-        //   return {
-        //     ...state,
-        //     enter: action.enter,
-        //     usual: action.usual,
-        //     leave: action.leave
-        //   }
+        mode: action.mode
+      });
 
+    case 'HAS_ENTERED':
+      return _objectSpread({}, state, {
+        hasEntered: true
+      });
+
+    case 'REMOVE_KEEP':
+      return _objectSpread({}, state, {
+        keep: null
       });
 
     default:
@@ -1332,53 +1330,13 @@ var useStateContext = function useStateContext() {
   return useContext(StateContext);
 };
 
-var TransitionLink = function TransitionLink(_ref) {
-  var to = _ref.to,
-      enter = _ref.enter,
-      leave = _ref.leave,
-      className = _ref.className,
-      style = _ref.style,
-      children = _ref.children;
-
-  // const [{}, dispatch] = useStateContext()
-  // console.log(dispatch)
-  function onClick(event) {
-    event.preventDefault(); // dispatch({
-    //   type: 'GOTO',
-    //   to,
-    //   enter,
-    //   leave
-    // })
-  }
-
-  return React.createElement("a", {
-    href: to,
-    onClick: onClick,
-    className: className,
-    style: style
-  }, children);
-};
-
-TransitionLink.propTypes = {
-  to: propTypes.string,
-  enter: propTypes.object,
-  leave: propTypes.object,
-  className: propTypes.string,
-  style: propTypes.object,
-  children: propTypes.node
-};
-TransitionLink.defaultProps = {
-  to: '',
-  enter: {},
-  leave: {},
-  className: '',
-  style: {},
-  children: null
-};
-
 var TransitionView = function TransitionView(_ref) {
   var view = _ref.view,
-      action = _ref.action;
+      action = _ref.action,
+      y = _ref.y,
+      isKeep = _ref.isKeep,
+      skipEnterAnimation = _ref.skipEnterAnimation,
+      skipLeaveAnimation = _ref.skipLeaveAnimation;
 
   var _useStateContext = useStateContext(),
       _useStateContext2 = _slicedToArray(_useStateContext, 2),
@@ -1390,43 +1348,71 @@ var TransitionView = function TransitionView(_ref) {
       leave = _useStateContext2$.leave,
       dispatch = _useStateContext2[1];
 
-  var _useState = useState(mode === 'immediate' ? {
-    position: 'fixed',
-    transform: "translate3d(0,-".concat(prevLocation && prevLocation.y[1], "px,0)")
-  } : {}),
+  var _useState = useState(function () {
+    if (mode === 'immediate') {
+      return {
+        position: 'fixed',
+        transform: "translate3d(0,-".concat(prevLocation && prevLocation.y[1], "px,0)")
+      };
+    }
+
+    if (isKeep) {
+      return {
+        opacity: 0
+      };
+    }
+
+    return {};
+  }),
       _useState2 = _slicedToArray(_useState, 2),
       styles = _useState2[0],
       setStyles = _useState2[1];
 
   var _useSpring = useSpring(function () {
-    return _objectSpread({}, enter);
+    return skipEnterAnimation ? usual : enter;
   }),
       _useSpring2 = _slicedToArray(_useSpring, 2),
       props = _useSpring2[0],
       set = _useSpring2[1];
 
   useEffect(function () {
-    if (action === 'enter') {
-      set(_objectSpread({}, usual, {
-        onRest: function onRest(props) {
-          if (mode === 'immediate') {
-            window.scrollTo(0, 0);
-          }
+    switch (action) {
+      case 'enter':
+        set(_objectSpread({}, usual, {
+          onStart: function onStart() {
+            if (isKeep) {
+              window.scrollTo(0, y);
+            }
+          },
+          onRest: function onRest(props) {
+            if (isKeep) {
+              dispatch({
+                type: 'REMOVE_KEEP'
+              });
+              setStyles({
+                opacity: 1
+              });
+            }
 
-          if (mode === 'immediate') {
-            setStyles({
-              position: 'relative',
-              transform: 'translate3d(0, 0px, 0)',
-              willChange: ''
+            if (mode === 'immediate') {
+              window.scrollTo(0, 0);
+              setStyles({
+                position: 'relative',
+                transform: 'translate3d(0, 0px, 0)',
+                willChange: ''
+              });
+            }
+
+            if (typeof usual.onRest === 'function') usual.onRest(props);else if (typeof enter.onRest === 'function') enter.onRest(props);
+            dispatch({
+              type: 'HAS_ENTERED'
             });
           }
+        }));
+        break;
 
-          if (typeof usual.onRest === 'function') usual.onRest(props);else if (typeof enter.onRest === 'function') enter.onRest(props);
-        }
-      }));
-    } else {
-      set(_objectSpread({}, leave, {
-        onRest: function onRest(props) {
+      case 'leave':
+        if (skipLeaveAnimation) {
           dispatch({
             type: 'REMOVE_VIEW',
             locationKey: view.props.location.key
@@ -1439,20 +1425,38 @@ var TransitionView = function TransitionView(_ref) {
             });
           }
 
-          if (typeof leave.onRest === 'function') leave.onRest(props);
+          return;
         }
-      }));
+
+        set(_objectSpread({}, leave, {
+          onRest: function onRest(props) {
+            dispatch({
+              type: 'REMOVE_VIEW',
+              locationKey: view.props.location.key
+            });
+
+            if (mode === 'successive') {
+              window.scrollTo(0, 0);
+              dispatch({
+                type: 'ADD_VIEW_FROM_QUEUE'
+              });
+            }
+
+            if (typeof leave.onRest === 'function') leave.onRest(props);
+          }
+        }));
+        break;
     }
   }, [action]);
   return React.createElement("div", {
     className: "view-container",
     style: _objectSpread({
       width: '100%',
-      gridArea: 'View'
-    }, styles, {
+      gridArea: 'View',
       willChange: mode === 'immediate' && 'transform',
+      gridTemplateAreas: 'View',
       top: 0
-    })
+    }, styles)
   }, React.createElement(animated.div, {
     style: {
       width: '100%',
@@ -1461,6 +1465,23 @@ var TransitionView = function TransitionView(_ref) {
       transform: props.transform
     },
     className: "view"
+  }, view));
+};
+
+var TransitionKeep = function TransitionKeep(_ref) {
+  var view = _ref.view;
+  return React.createElement("div", {
+    className: "view-container",
+    style: {
+      width: '100%',
+      gridArea: 'View',
+      top: 0,
+      position: 'fixed',
+      transform: "translate3d(0,-".concat(view.y, "px,0)"),
+      zIndex: -1
+    }
+  }, React.createElement("div", {
+    className: "view view--keep"
   }, view));
 };
 
@@ -1478,33 +1499,21 @@ var TransitionViews = function TransitionViews(_ref) {
       currentLocation = _useStateContext2$.currentLocation,
       views = _useStateContext2$.views,
       queue = _useStateContext2$.queue,
-      dispatch = _useStateContext2[1]; // const validEnter = useMemo(() => validateSpring(enter), [enter])
-  // const validUsual = useMemo(() => validateSpring(usual), [usual])
-  // const validLeave = useMemo(() => validateSpring(leave), [leave])
-
+      keep = _useStateContext2$.keep,
+      dispatch = _useStateContext2[1];
 
   useEffect(function () {
     dispatch({
       type: 'UPDATE_MODE',
       mode: mode
     });
-  }, [mode]); // useEffect(() => {
-  //   dispatch({
-  //     type: 'UPDATE_SPRINGS',
-  //     enter: validateSpring(enter),
-  //     usual: validateSpring(usual),
-  //     leave: validateSpring(leave)
-  //   })
-  //   // console.log('update Springs!')
-  // }, [enter, usual, leave])
-
+  }, [mode]);
   useEffect(function () {
-    if (currentLocation.key !== location.key) {
-      dispatch({
-        type: 'UPDATE_LOCATION',
-        location: location
-      });
-    }
+    if (currentLocation.key === location.key) return;
+    dispatch({
+      type: 'UPDATE_LOCATION',
+      location: location
+    });
   }, [location.pathname]);
   useEffect(function () {
     if (currentLocation.key === children.props.location.key) return;
@@ -1536,17 +1545,19 @@ var TransitionViews = function TransitionViews(_ref) {
     className: "views"
   }, views.map(function (view, index) {
     if (!view) return null;
+    var isKeep = keep && keep.props.location.pathname === view.props.location.pathname;
     return React.createElement(TransitionView, {
       key: view.props.location.key,
       view: view,
-      action: !index ? 'enter' : 'leave',
-      style: {
-        width: '100%',
-        overflow: 'hidden',
-        display: 'grid',
-        gridTemplateAreas: 'View'
-      }
+      isKeep: isKeep,
+      skipEnterAnimation: isKeep,
+      skipLeaveAnimation: isKeep,
+      y: isKeep ? keep.y : 0,
+      action: !index ? 'enter' : 'leave'
     });
+  }), keep && React.createElement(TransitionKeep, {
+    key: keep.props.location.key,
+    view: keep
   }));
 };
 
@@ -1595,7 +1606,8 @@ var TransitionProvider = function TransitionProvider(props) {
       mode: props.mode,
       enter: validateSpring(props.enter),
       usual: validateSpring(props.usual),
-      leave: validateSpring(props.leave)
+      leave: validateSpring(props.leave),
+      hasEntered: false
     }
   }, React.createElement(TransitionViews, props));
 };
@@ -1625,5 +1637,5 @@ TransitionProvider.defaultProps = {
   }
 };
 
-export { TransitionLink, TransitionProvider, useStateContext as useTransitionStore };
+export { TransitionProvider, useStateContext as useTransitionStore };
 //# sourceMappingURL=index.es.js.map
