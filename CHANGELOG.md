@@ -1,3 +1,13 @@
+### 1.6.0 (2019-05-24)
+
+##### New Features
+
+*  add transitionLink (e2f3f3cb)
+
+##### Bug Fixes
+
+*  Fix peer-dependencies. (2c1dc888)
+
 #### 1.5.1 (2019-05-24)
 
 ##### Bug Fixes
