@@ -1382,6 +1382,11 @@ var TransitionView = function TransitionView(_ref) {
             if (mode === 'successive' || isKeep) {
               window.scrollTo(0, y);
             }
+
+            if (typeof usual.onStart === 'function') usual.onStart(props);else if (typeof enter.onStart === 'function') enter.onStart(props);
+          },
+          onFrame: function onFrame(props) {
+            if (typeof usual.onFrame === 'function') usual.onFrame(props);else if (typeof enter.onFrame === 'function') enter.onFrame(props);
           },
           onRest: function onRest(props) {
             if (isKeep) {
@@ -1428,8 +1433,12 @@ var TransitionView = function TransitionView(_ref) {
         }
 
         set(_objectSpread({}, leave, {
-          onStart: function onStart() {},
-          // overwrite enter animation
+          onStart: function onStart(props) {
+            if (typeof leave.onLeave === 'function') leave.onLeave(props);
+          },
+          onFrame: function onFrame(props) {
+            if (typeof leave.onFrame === 'function') leave.onFrame(props);
+          },
           onRest: function onRest(props) {
             dispatch({
               type: 'REMOVE_VIEW',
@@ -1492,7 +1501,11 @@ function getY$1(_ref) {
       currentLocation = _ref.currentLocation;
   var isKeep = keep && keep.props.location.pathname === view.props.location.pathname;
   if (isKeep) return keep.y;
-  if (currentLocation && currentLocation.state && currentLocation.state.y) return currentLocation.state.y;
+
+  if (currentLocation && currentLocation.state && currentLocation.state.y) {
+    return currentLocation.state.y;
+  }
+
   return 0;
 }
 

@@ -7,7 +7,9 @@ import Keep from './keep'
 function getY ({ view, keep, currentLocation }) {
   const isKeep = keep && keep.props.location.pathname === view.props.location.pathname
   if (isKeep) return keep.y
-  if (currentLocation && currentLocation.state && currentLocation.state.y) return currentLocation.state.y
+  if (currentLocation && currentLocation.state && currentLocation.state.y) {
+    return currentLocation.state.y
+  }
   return 0
 }
 

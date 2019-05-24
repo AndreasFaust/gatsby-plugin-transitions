@@ -32,6 +32,12 @@ const TransitionView = ({
             if (mode === 'successive' || isKeep) {
               window.scrollTo(0, y)
             }
+            if (typeof usual.onStart === 'function') usual.onStart(props)
+            else if (typeof enter.onStart === 'function') enter.onStart(props)
+          },
+          onFrame: (props) => {
+            if (typeof usual.onFrame === 'function') usual.onFrame(props)
+            else if (typeof enter.onFrame === 'function') enter.onFrame(props)
           },
           onRest: (props) => {
             if (isKeep) {
@@ -64,7 +70,12 @@ const TransitionView = ({
         }
         set({
           ...leave,
-          onStart: () => {}, // overwrite enter animation
+          onStart: (props) => {
+            if (typeof leave.onLeave === 'function') leave.onLeave(props)
+          },
+          onFrame: (props) => {
+            if (typeof leave.onFrame === 'function') leave.onFrame(props)
+          },
           onRest: (props) => {
             dispatch({ type: 'REMOVE_VIEW', locationKey: view.props.location.key })
             if (mode === 'successive') {
