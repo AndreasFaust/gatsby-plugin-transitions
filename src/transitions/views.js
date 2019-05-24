@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { useStateContext } from './state'
+import { navigate } from 'gatsby'
 
 import View from './view'
 import Keep from './keep'
@@ -7,14 +8,14 @@ import Keep from './keep'
 function getY ({ view, keep, currentLocation }) {
   const isKeep = keep && keep.props.location.pathname === view.props.location.pathname
   if (isKeep) return keep.y
-  if (currentLocation && currentLocation.state && currentLocation.state.y) {
-    return currentLocation.state.y
+  if (currentLocation && currentLocation.y) {
+    return currentLocation.y
   }
   return 0
 }
 
 const TransitionViews = ({ location, enter, usual, leave, mode, children }) => {
-  const [{ currentLocation, views, queue, keep }, dispatch] = useStateContext()
+  const [{ to, currentLocation, views, queue, keep, modeInterim }, dispatch] = useStateContext()
 
   useEffect(() => {
     dispatch({
@@ -24,7 +25,10 @@ const TransitionViews = ({ location, enter, usual, leave, mode, children }) => {
   }, [mode])
 
   useEffect(() => {
-    if (currentLocation.key === location.key) return
+    if (to) navigate(to)
+  }, [to])
+
+  useEffect(() => {
     dispatch({
       type: 'UPDATE_LOCATION',
       location
@@ -32,21 +36,19 @@ const TransitionViews = ({ location, enter, usual, leave, mode, children }) => {
   }, [location.pathname])
 
   useEffect(() => {
-    // const currentMode = (currentLocation && currentLocation.state && currentLocation.state.mode) || mode
-    // console.log(currentMode)
-    if (currentLocation.key === children.props.location.key) return
-
-    if (mode === 'successive') {
+    console.log(currentLocation.mode)
+    const currentMode = modeInterim || mode
+    if (currentMode === 'successive') {
       if (views.filter(view => view).length && !queue) {
         dispatch({ type: 'ADD_QUEUE', view: children })
       } else {
         dispatch({ type: 'ADD_VIEW_DIRECTLY', view: children })
       }
     }
-    if (mode === 'immediate') {
+    if (currentMode === 'immediate') {
       dispatch({ type: 'ADD_VIEW_DIRECTLY', view: children })
     }
-  }, [children.props.location.pathname])
+  }, [children.key])
 
   return (
     <div className='views'>
@@ -57,10 +59,10 @@ const TransitionViews = ({ location, enter, usual, leave, mode, children }) => {
           <View
             key={view.props.location.key}
             view={view}
-            enter={(currentLocation && currentLocation.state && currentLocation.state.enter) || enter}
-            leave={(currentLocation && currentLocation.state && currentLocation.state.leave) || leave}
-            usual={(currentLocation && currentLocation.state && currentLocation.state.usual) || usual}
-            mode={mode}
+            enter={(currentLocation && currentLocation.enter) || enter}
+            leave={(currentLocation && currentLocation.leave) || leave}
+            usual={(currentLocation && currentLocation.usual) || usual}
+            mode={(currentLocation && currentLocation.mode) || mode}
             isKeep={isKeep}
             skipEnterAnimation={isKeep}
             skipLeaveAnimation={isKeep}

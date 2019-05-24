@@ -1,3 +1,4 @@
+import validateSpring from '../utils/validateSpring'
 
 function getY (currentLocation) {
   const scroll = window.sessionStorage.getItem(`@@scroll|${currentLocation.key}`)
@@ -12,18 +13,43 @@ function filterViews (views) {
 
 export default (state, action) => {
   switch (action.type) {
+    case 'NAVIGATE':
+      return {
+        ...state,
+        to: action.to,
+        enterInterim: action.enter && validateSpring(action.enter),
+        usualInterim: action.usual && validateSpring(action.usual),
+        leaveInterim: action.leave && validateSpring(action.leave),
+        modeInterim: action.mode,
+        keepInterim: action.keep,
+        y: action.y
+      }
     case 'UPDATE_LOCATION':
       return {
         ...state,
-        currentLocation: action.location,
+        to: undefined,
+        y: undefined,
+        enterInterim: null,
+        usualInterim: null,
+        leaveInterim: null,
+        modeInterim: '',
+        currentLocation: {
+          ...action.location,
+          enter: state.enterInterim,
+          usual: state.usualInterim,
+          leave: state.leaveInterim,
+          y: state.y || 0,
+          mode: state.modeInterim
+        },
         prevLocation: {
           ...state.currentLocation,
           y: getY(state.currentLocation)
         },
         views: [null, ...filterViews(state.views)],
-        keep: action.location.state.keep
+        keep: state.keepInterim
           ? { ...state.views[0], y: getY(state.currentLocation) }
           : state.keep,
+        keepInterim: false,
         hasEntered: false
       }
     case 'ADD_QUEUE':

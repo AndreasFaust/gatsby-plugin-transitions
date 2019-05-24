@@ -5,12 +5,12 @@ import { useSpring, animated } from 'react-spring'
 const TransitionView = ({
   view, mode, action, enter, leave, usual, y, isKeep, skipEnterAnimation, skipLeaveAnimation
 }) => {
-  const [{ prevLocation }, dispatch] = useStateContext()
+  const [, dispatch] = useStateContext()
   const [styles, setStyles] = useState(() => {
     if (mode === 'immediate') {
       return {
         position: 'fixed',
-        transform: `translate3d(0,-${prevLocation && prevLocation.y[1]}px,0)`
+        transform: `translate3d(0,-${y}px,0)`
       }
     }
     if (isKeep) {
@@ -28,6 +28,7 @@ const TransitionView = ({
       case 'enter':
         set({
           ...usual,
+          config: enter.config,
           onStart: () => {
             if (mode === 'successive' || isKeep) {
               window.scrollTo(0, y)
@@ -45,12 +46,12 @@ const TransitionView = ({
               setStyles({ opacity: 1 })
             }
             if (mode === 'immediate') {
-              window.scrollTo(0, y)
               setStyles({
                 position: 'relative',
                 transform: 'translate3d(0, 0px, 0)',
                 willChange: ''
               })
+              window.scrollTo(0, y)
             }
             if (typeof usual.onRest === 'function') usual.onRest(props)
             else if (typeof enter.onRest === 'function') enter.onRest(props)
@@ -68,11 +69,9 @@ const TransitionView = ({
           }
           return
         }
-        console.log(leave)
         set({
           ...leave,
           onStart: (props) => {
-            console.log('LEAVE ON START')
             if (typeof leave.onStart === 'function') leave.onStart(props)
           },
           onFrame: (props) => {
@@ -81,6 +80,7 @@ const TransitionView = ({
           onRest: (props) => {
             dispatch({ type: 'REMOVE_VIEW', locationKey: view.props.location.key })
             if (mode === 'successive') {
+              window.scrollTo(0, 0)
               dispatch({ type: 'ADD_VIEW_FROM_QUEUE' })
             }
             if (typeof leave.onRest === 'function') leave.onRest(props)
