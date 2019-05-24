@@ -28,7 +28,7 @@ export default {
     }),
     resolve(),
     commonjs()
-  ],
-  external: ['styled-components'],
-  globals: { 'styled-components': 'styled' }
+  ]
+  // external: ['styled-components'],
+  // globals: { 'styled-components': 'styled' }
 }

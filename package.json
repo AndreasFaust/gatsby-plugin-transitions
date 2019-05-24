@@ -24,7 +24,8 @@
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "babel-plugin-macros": "^2.5.1",
-    "gatsby": "^2.0.119",
+    "gatsby": "^2.7.1",
+    "gatsby-cli": "^2.6.2",
     "gatsby-plugin-layout": "^1.0.15",
     "gatsby-plugin-react-helmet": "^3.0.2",
     "gatsby-plugin-sass": "^2.0.11",
@@ -35,10 +36,10 @@
     "react-dom": "^16.8.5",
     "react-select": "^2.4.3",
     "react-spring": "^8.0.20",
-    "rollup": "^1.1.2",
+    "rollup": "^1.12.3",
     "rollup-plugin-babel": "^4.3.2",
-    "rollup-plugin-commonjs": "^9.2.0",
-    "rollup-plugin-node-resolve": "^4.0.0",
+    "rollup-plugin-commonjs": "^10.0.0",
+    "rollup-plugin-node-resolve": "^5.0.0",
     "rollup-plugin-peer-deps-external": "^2.2.0",
     "rollup-plugin-url": "^2.1.0",
     "standard": "^12.0.1"
@@ -46,7 +47,8 @@
   "peerDependencies": {
     "react": "^16.8.5",
     "react-dom": "^16.8.5",
-    "react-spring": "^8.0.0"
+    "react-spring": "^8.0.0",
+    "gatsby": "^2.7.0"
   },
   "keywords": [
     "gatsby",
@@ -59,9 +61,9 @@
     "dev": "gatsby develop",
     "start": "yarn dev",
     "build": "rollup -c && gatsby build --prefix-paths",
-    "release:major": "changelog -M && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version major && git push origin && git push origin --tags && yarn publish",
-    "release:minor": "changelog -m && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version minor && git push origin && git push origin --tags && yarn publish",
-    "release:patch": "changelog -p && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version patch && git push origin && git push origin --tags && yarn publish",
+    "release:major": "yarn build && changelog -M && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version major && git push origin && git push origin --tags && yarn publish",
+    "release:minor": "yarn build && changelog -m && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version minor && git push origin && git push origin --tags && yarn publish",
+    "release:patch": "yarn build && changelog -p && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version patch && git push origin && git push origin --tags && yarn publish",
     "deploy": "gh-pages -d public"
   }
 }

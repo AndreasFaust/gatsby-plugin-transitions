@@ -36,7 +36,6 @@ const TransitionViews = ({ location, enter, usual, leave, mode, children }) => {
   }, [location.pathname])
 
   useEffect(() => {
-    console.log(currentLocation.mode)
     const currentMode = modeInterim || mode
     if (currentMode === 'successive') {
       if (views.filter(view => view).length && !queue) {

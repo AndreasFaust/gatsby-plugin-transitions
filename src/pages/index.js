@@ -26,7 +26,7 @@ const IndexPage = ({ location }) => (
         }}
         enter={{
           opacity: 0,
-          transform: 'translate3d(0,20vh,0) scale3d(1, 1, 1)',
+          transform: 'translate3d(0,20vh,0) scale3d(1, 1, 1)'
           // config: {
           //   duration: 3000,
           //   clamp: true

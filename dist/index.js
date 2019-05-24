@@ -7,6 +7,99 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 var React = require('react');
 var React__default = _interopDefault(React);
 var reactSpring = require('react-spring');
+var gatsby = require('gatsby');
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+    var ownKeys = Object.keys(source);
+
+    if (typeof Object.getOwnPropertySymbols === 'function') {
+      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+      }));
+    }
+
+    ownKeys.forEach(function (key) {
+      _defineProperty(target, key, source[key]);
+    });
+  }
+
+  return target;
+}
+
+function _slicedToArray(arr, i) {
+  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
+}
+
+function _toConsumableArray(arr) {
+  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+}
+
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+    return arr2;
+  }
+}
+
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+
+function _iterableToArray(iter) {
+  if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
+}
+
+function _iterableToArrayLimit(arr, i) {
+  var _arr = [];
+  var _n = true;
+  var _d = false;
+  var _e = undefined;
+
+  try {
+    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
+
+      if (i && _arr.length === i) break;
+    }
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
+  }
+
+  return _arr;
+}
+
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance");
+}
+
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance");
+}
 
 function unwrapExports (x) {
 	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
@@ -1158,96 +1251,38 @@ if (process.env.NODE_ENV !== 'production') {
 }
 });
 
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
+function validateSpring(spring) {
+  var validated = {};
+  Object.keys(spring).map(function (key) {
+    switch (key) {
+      case 'opacity':
+        if (typeof spring[key] === 'number') {
+          validated[key] = spring[key];
+        }
 
-  return obj;
-}
+        break;
 
-function _objectSpread(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-    var ownKeys = Object.keys(source);
+      case 'transform':
+        if (spring[key] && typeof spring[key] === 'string') {
+          validated[key] = spring[key];
+        }
 
-    if (typeof Object.getOwnPropertySymbols === 'function') {
-      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
-        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-      }));
+        break;
+
+      case 'config':
+        if (typeof spring[key] === 'string') {
+          validated[key] = reactSpring.config[spring[key]] || {};
+        } else {
+          validated[key] = spring[key];
+        }
+
+        break;
+
+      default:
+        validated[key] = spring[key];
     }
-
-    ownKeys.forEach(function (key) {
-      _defineProperty(target, key, source[key]);
-    });
-  }
-
-  return target;
-}
-
-function _slicedToArray(arr, i) {
-  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
-}
-
-function _toConsumableArray(arr) {
-  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
-}
-
-function _arrayWithoutHoles(arr) {
-  if (Array.isArray(arr)) {
-    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
-
-    return arr2;
-  }
-}
-
-function _arrayWithHoles(arr) {
-  if (Array.isArray(arr)) return arr;
-}
-
-function _iterableToArray(iter) {
-  if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
-}
-
-function _iterableToArrayLimit(arr, i) {
-  var _arr = [];
-  var _n = true;
-  var _d = false;
-  var _e = undefined;
-
-  try {
-    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-      _arr.push(_s.value);
-
-      if (i && _arr.length === i) break;
-    }
-  } catch (err) {
-    _d = true;
-    _e = err;
-  } finally {
-    try {
-      if (!_n && _i["return"] != null) _i["return"]();
-    } finally {
-      if (_d) throw _e;
-    }
-  }
-
-  return _arr;
-}
-
-function _nonIterableSpread() {
-  throw new TypeError("Invalid attempt to spread non-iterable instance");
-}
-
-function _nonIterableRest() {
-  throw new TypeError("Invalid attempt to destructure non-iterable instance");
+  });
+  return validated;
 }
 
 function getY(currentLocation) {
@@ -1265,16 +1300,40 @@ function filterViews(views) {
 
 var reducer = (function (state, action) {
   switch (action.type) {
+    case 'NAVIGATE':
+      return _objectSpread({}, state, {
+        to: action.to,
+        enterInterim: action.enter && validateSpring(action.enter),
+        usualInterim: action.usual && validateSpring(action.usual),
+        leaveInterim: action.leave && validateSpring(action.leave),
+        modeInterim: action.mode,
+        keepInterim: action.keep,
+        y: action.y
+      });
+
     case 'UPDATE_LOCATION':
       return _objectSpread({}, state, {
-        currentLocation: action.location,
+        to: undefined,
+        y: undefined,
+        enterInterim: null,
+        usualInterim: null,
+        leaveInterim: null,
+        modeInterim: '',
+        currentLocation: _objectSpread({}, action.location, {
+          enter: state.enterInterim,
+          usual: state.usualInterim,
+          leave: state.leaveInterim,
+          y: state.y || 0,
+          mode: state.modeInterim
+        }),
         prevLocation: _objectSpread({}, state.currentLocation, {
           y: getY(state.currentLocation)
         }),
         views: [null].concat(_toConsumableArray(filterViews(state.views))),
-        keep: action.location.state.keep ? _objectSpread({}, state.views[0], {
+        keep: state.keepInterim ? _objectSpread({}, state.views[0], {
           y: getY(state.currentLocation)
         }) : state.keep,
+        keepInterim: false,
         hasEntered: false
       });
 
@@ -1337,6 +1396,64 @@ var useStateContext = function useStateContext() {
   return React.useContext(StateContext);
 };
 
+var TransitionLink = function TransitionLink(_ref) {
+  var to = _ref.to,
+      enter = _ref.enter,
+      usual = _ref.usual,
+      leave = _ref.leave,
+      y = _ref.y,
+      mode = _ref.mode,
+      className = _ref.className,
+      style = _ref.style,
+      children = _ref.children;
+
+  var _useStateContext = useStateContext(),
+      _useStateContext2 = _slicedToArray(_useStateContext, 2),
+      dispatch = _useStateContext2[1];
+
+  function onClick(event) {
+    event.preventDefault();
+    dispatch({
+      type: 'NAVIGATE',
+      to: to,
+      enter: enter,
+      usual: usual,
+      leave: leave,
+      y: y,
+      mode: mode
+    });
+  }
+
+  return React__default.createElement("a", {
+    href: to,
+    onClick: onClick,
+    className: className,
+    style: style
+  }, children);
+};
+
+TransitionLink.propTypes = {
+  to: propTypes.string.isRequired,
+  enter: propTypes.object,
+  usual: propTypes.object,
+  leave: propTypes.object,
+  y: propTypes.number,
+  mode: propTypes.string,
+  className: propTypes.string,
+  style: propTypes.object,
+  children: propTypes.node
+};
+TransitionLink.defaultProps = {
+  enter: null,
+  usual: null,
+  leave: null,
+  y: undefined,
+  mode: '',
+  className: '',
+  style: {},
+  children: null
+};
+
 var TransitionView = function TransitionView(_ref) {
   var view = _ref.view,
       mode = _ref.mode,
@@ -1351,14 +1468,13 @@ var TransitionView = function TransitionView(_ref) {
 
   var _useStateContext = useStateContext(),
       _useStateContext2 = _slicedToArray(_useStateContext, 2),
-      prevLocation = _useStateContext2[0].prevLocation,
       dispatch = _useStateContext2[1];
 
   var _useState = React.useState(function () {
     if (mode === 'immediate') {
       return {
         position: 'fixed',
-        transform: "translate3d(0,-".concat(prevLocation && prevLocation.y[1], "px,0)")
+        transform: "translate3d(0,-".concat(y, "px,0)")
       };
     }
 
@@ -1385,6 +1501,7 @@ var TransitionView = function TransitionView(_ref) {
     switch (action) {
       case 'enter':
         set(_objectSpread({}, usual, {
+          config: enter.config,
           onStart: function onStart() {
             if (mode === 'successive' || isKeep) {
               window.scrollTo(0, y);
@@ -1406,12 +1523,12 @@ var TransitionView = function TransitionView(_ref) {
             }
 
             if (mode === 'immediate') {
-              window.scrollTo(0, y);
               setStyles({
                 position: 'relative',
                 transform: 'translate3d(0, 0px, 0)',
                 willChange: ''
               });
+              window.scrollTo(0, y);
             }
 
             if (typeof usual.onRest === 'function') usual.onRest(props);else if (typeof enter.onRest === 'function') enter.onRest(props);
@@ -1453,7 +1570,7 @@ var TransitionView = function TransitionView(_ref) {
             });
 
             if (mode === 'successive') {
-              // window.scrollTo(0, 0)
+              window.scrollTo(0, 0);
               dispatch({
                 type: 'ADD_VIEW_FROM_QUEUE'
               });
@@ -1509,8 +1626,8 @@ function getY$1(_ref) {
   var isKeep = keep && keep.props.location.pathname === view.props.location.pathname;
   if (isKeep) return keep.y;
 
-  if (currentLocation && currentLocation.state && currentLocation.state.y) {
-    return currentLocation.state.y;
+  if (currentLocation && currentLocation.y) {
+    return currentLocation.y;
   }
 
   return 0;
@@ -1527,10 +1644,12 @@ var TransitionViews = function TransitionViews(_ref2) {
   var _useStateContext = useStateContext(),
       _useStateContext2 = _slicedToArray(_useStateContext, 2),
       _useStateContext2$ = _useStateContext2[0],
+      to = _useStateContext2$.to,
       currentLocation = _useStateContext2$.currentLocation,
       views = _useStateContext2$.views,
       queue = _useStateContext2$.queue,
       keep = _useStateContext2$.keep,
+      modeInterim = _useStateContext2$.modeInterim,
       dispatch = _useStateContext2[1];
 
   React.useEffect(function () {
@@ -1540,18 +1659,18 @@ var TransitionViews = function TransitionViews(_ref2) {
     });
   }, [mode]);
   React.useEffect(function () {
-    if (currentLocation.key === location.key) return;
+    if (to) gatsby.navigate(to);
+  }, [to]);
+  React.useEffect(function () {
     dispatch({
       type: 'UPDATE_LOCATION',
       location: location
     });
   }, [location.pathname]);
   React.useEffect(function () {
-    // const currentMode = (currentLocation && currentLocation.state && currentLocation.state.mode) || mode
-    // console.log(currentMode)
-    if (currentLocation.key === children.props.location.key) return;
+    var currentMode = modeInterim || mode;
 
-    if (mode === 'successive') {
+    if (currentMode === 'successive') {
       if (views.filter(function (view) {
         return view;
       }).length && !queue) {
@@ -1567,13 +1686,13 @@ var TransitionViews = function TransitionViews(_ref2) {
       }
     }
 
-    if (mode === 'immediate') {
+    if (currentMode === 'immediate') {
       dispatch({
         type: 'ADD_VIEW_DIRECTLY',
         view: children
       });
     }
-  }, [children.props.location.pathname]);
+  }, [children.key]);
   return React__default.createElement("div", {
     className: "views"
   }, views.map(function (view, index) {
@@ -1582,10 +1701,10 @@ var TransitionViews = function TransitionViews(_ref2) {
     return React__default.createElement(TransitionView, {
       key: view.props.location.key,
       view: view,
-      enter: currentLocation && currentLocation.state && currentLocation.state.enter || enter,
-      leave: currentLocation && currentLocation.state && currentLocation.state.leave || leave,
-      usual: currentLocation && currentLocation.state && currentLocation.state.usual || usual,
-      mode: mode,
+      enter: currentLocation && currentLocation.enter || enter,
+      leave: currentLocation && currentLocation.leave || leave,
+      usual: currentLocation && currentLocation.usual || usual,
+      mode: currentLocation && currentLocation.mode || mode,
       isKeep: isKeep,
       skipEnterAnimation: isKeep,
       skipLeaveAnimation: isKeep,
@@ -1601,40 +1720,6 @@ var TransitionViews = function TransitionViews(_ref2) {
     view: keep
   }));
 };
-
-function validateSpring(spring) {
-  var validated = {};
-  Object.keys(spring).map(function (key) {
-    switch (key) {
-      case 'opacity':
-        if (typeof spring[key] === 'number') {
-          validated[key] = spring[key];
-        }
-
-        break;
-
-      case 'transform':
-        if (spring[key] && typeof spring[key] === 'string') {
-          validated[key] = spring[key];
-        }
-
-        break;
-
-      case 'config':
-        if (typeof spring[key] === 'string') {
-          validated[key] = reactSpring.config[spring[key]] || {};
-        } else {
-          validated[key] = spring[key];
-        }
-
-        break;
-
-      default:
-        validated[key] = spring[key];
-    }
-  });
-  return validated;
-}
 
 var TransitionProvider = function TransitionProvider(props) {
   return React__default.createElement(StateProvider, {
@@ -1678,6 +1763,7 @@ TransitionProvider.defaultProps = {
   }
 };
 
+exports.TransitionLink = TransitionLink;
 exports.TransitionProvider = TransitionProvider;
 exports.useTransitionStore = useStateContext;
 //# sourceMappingURL=index.js.map
