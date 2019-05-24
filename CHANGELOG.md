@@ -1,3 +1,9 @@
+### 1.5.0 (2019-05-24)
+
+##### New Features
+
+*  add onStart and onFrame callbacks. (a68b7a2c)
+
 ### 1.4.0 (2019-05-23)
 
 ##### New Features
