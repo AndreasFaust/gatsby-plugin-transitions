@@ -17,6 +17,9 @@ const IndexPage = ({ location }) => (
           transform: 'translate3d(0,-100vh,0) scale3d(1, 1, 1)',
           config: {
             clamp: true
+          },
+          test: () => {
+            console.log('ICH BIN ONSTART??')
           }
         },
         enter: {

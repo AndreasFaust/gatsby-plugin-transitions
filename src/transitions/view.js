@@ -68,9 +68,11 @@ const TransitionView = ({
           }
           return
         }
+        console.log(leave)
         set({
           ...leave,
           onStart: (props) => {
+            console.log('LEAVE ON START')
             if (typeof leave.onStart === 'function') leave.onStart(props)
           },
           onFrame: (props) => {
@@ -79,7 +81,6 @@ const TransitionView = ({
           onRest: (props) => {
             dispatch({ type: 'REMOVE_VIEW', locationKey: view.props.location.key })
             if (mode === 'successive') {
-              // window.scrollTo(0, 0)
               dispatch({ type: 'ADD_VIEW_FROM_QUEUE' })
             }
             if (typeof leave.onRest === 'function') leave.onRest(props)

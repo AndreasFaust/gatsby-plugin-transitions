@@ -14,7 +14,6 @@ const Layout = ({
       <TransitionProvider
         location={location}
         mode={mode}
-        keep={['/']}
         enter={{
           opacity: 0,
           transform: 'translate3d(0,0vh,0) scale3d(1, 1, 1)',
@@ -51,6 +50,9 @@ const Layout = ({
             tension: 210,
             friction: 20,
             clamp: true
+          },
+          onStart: () => {
+            console.log('WARUM??')
           }
           // config: {
           //   mass: 1,
