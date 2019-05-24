@@ -1441,7 +1441,7 @@ var TransitionView = function TransitionView(_ref) {
 
         set(_objectSpread({}, leave, {
           onStart: function onStart(props) {
-            if (typeof leave.onLeave === 'function') leave.onLeave(props);
+            if (typeof leave.onStart === 'function') leave.onStart(props);
           },
           onFrame: function onFrame(props) {
             if (typeof leave.onFrame === 'function') leave.onFrame(props);

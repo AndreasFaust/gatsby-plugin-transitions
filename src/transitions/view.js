@@ -71,7 +71,7 @@ const TransitionView = ({
         set({
           ...leave,
           onStart: (props) => {
-            if (typeof leave.onLeave === 'function') leave.onLeave(props)
+            if (typeof leave.onStart === 'function') leave.onStart(props)
           },
           onFrame: (props) => {
             if (typeof leave.onFrame === 'function') leave.onFrame(props)
