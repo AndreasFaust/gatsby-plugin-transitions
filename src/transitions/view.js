@@ -105,7 +105,7 @@ const TransitionView = ({
       <animated.div
         style={{
           width: '100%',
-          willChange: `opacity${enter.transform || leave.transform ? ', transform' : ''}`,
+          willChange: `opacity${enter.transform || usual.transform ? ', transform' : ''}`,
           opacity: props.opacity,
           transform: props.transform
         }}

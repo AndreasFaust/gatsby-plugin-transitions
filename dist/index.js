@@ -1597,7 +1597,7 @@ var TransitionView = function TransitionView(_ref) {
   }, React__default.createElement(reactSpring.animated.div, {
     style: {
       width: '100%',
-      willChange: "opacity".concat(enter.transform || leave.transform ? ', transform' : ''),
+      willChange: "opacity".concat(enter.transform || usual.transform ? ', transform' : ''),
       opacity: props.opacity,
       transform: props.transform
     },
