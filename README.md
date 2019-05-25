@@ -1,8 +1,8 @@
 **gatsby-plugin-transitions** enables animated page-transitions. It uses react-spring for smooth, customizable animations.
 
 - Default animation for every page-transition
-- Define Special animations for certain links additionally
-- Two animation-modes: successive (animate out, then animate in) and immediate (in and out at the same time)
+- Define **per link** animations additionally
+- Two animation-modes: **successive** (animate out, then animate in) and **immediate** (in and out at the same time)
 
 [![NPM](https://img.shields.io/npm/v/gatsby-plugin-transitions.svg)](https://www.npmjs.com/package/gatsby-plugin-transitions) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
@@ -42,8 +42,10 @@ exports.shouldUpdateScroll = () => {
 
 ### 3. Create default Layout-file
 
-Create the folder `src/layouts` and the file `src/layouts/index.js`.
-Here you need to wrap all `children` into the component `TransitionProvider`
+Activate `gatsby-plugin-layout`. Either do it your own way, or take the default path:
+
+- Create the folder `src/layouts` and the file `src/layouts/index.js`.
+- Here you need to wrap all `children` into the component `TransitionProvider`
 
 ```jsx
 import React from "react";
@@ -85,8 +87,6 @@ You can enter default-springs for all animation-states:
 - `enter`: From-values, when the view is entering.
 - `usual`: Normal animation-state of the view.
 - `leave`: To-Values, when the view is leaving.
-
-🔥 **Caution:** In react-spring the values of the previous animation persist. For example: If you want to execute a `onRest`-function only on `enter`, you have to overwrite it in `leave`!
 
 #### opacity and transform
 
@@ -216,6 +216,48 @@ const MyComponent = () => {
     </div>
   );
 };
+
+export default MyComponent;
+```
+
+## 🔥 Caution 🔥
+
+### Persistant values
+
+In react-spring the values of the previous animation persist. For example: If you want to execute a `onRest`-function only on `enter`, you have to overwrite it in `leave`!
+
+### Keep animated props consistent!
+
+react-spring needs consistent props and transform-units.
+So if you for example once animated `opacity`, always write it, even if it does not get changed!
+
+```jsx
+import React from "react";
+import { TransitionLink } from "gatsby-plugin-transitions";
+
+const MyComponent = () => (
+  <TransitionLink
+    to="/page-2"
+    style={{ color: "red" }}
+    className="my-custom-link"
+    leave={{
+      opacity: 0,
+      transform: "translate3d(100vh,0vh,0)"
+    }}
+    enter={{
+      opacity: 0,
+      transform: "translate3d(100vh,0vh,0)"
+    }}
+    usual={{
+      transform: "translate3d(0vh,100vh,0)",
+      opacity: 1
+    }}
+    mode="immediate"
+    y={1000}
+  >
+    I have a special animation!
+  </TransitionLink>
+);
 
 export default MyComponent;
 ```
