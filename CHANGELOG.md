@@ -1,3 +1,9 @@
+### 1.8.0 (2019-05-25)
+
+##### New Features
+
+*  add style-prop. (acf3cd54)
+
 #### 1.7.1 (2019-05-25)
 
 ##### Documentation Changes
