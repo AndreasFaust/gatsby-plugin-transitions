@@ -50,10 +50,10 @@ const Layout = ({
             tension: 210,
             friction: 20,
             clamp: true
-          },
-          onStart: () => {
-            console.log('WARUM??')
           }
+          // onStart: () => {
+          //   console.log('WARUM??')
+          // }
           // config: {
           //   mass: 1,
           //   tension: 210,
@@ -61,7 +61,6 @@ const Layout = ({
           //   clamp: true
           // }
         }}
-        // mode={'immediate'}
       >
         {children}
       </TransitionProvider>
