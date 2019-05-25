@@ -1,3 +1,9 @@
+#### 1.8.1 (2019-05-25)
+
+##### Documentation Changes
+
+*  Fix docs. (0b366aa5)
+
 ### 1.8.0 (2019-05-25)
 
 ##### New Features
