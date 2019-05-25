@@ -1700,13 +1700,20 @@ var TransitionViews = function TransitionViews(_ref2) {
     className: "views"
   }, views.map(function (view, index) {
     if (!view) return null;
-    var isKeep = keep && keep.props.location.pathname === view.props.location.pathname;
+    var isKeep = keep && keep.props.location.pathname === view.props.location.pathname; // console.log(view.props.location.pathname)
+    // console.log(currentLocation.pathname)
+    // console.log((currentLocation && currentLocation.leave) || leave)
+    // console.log((currentLocation && view.props.location.pathname === currentLocation.pathname && currentLocation.usual) || usual)
+    // console.log((currentLocation && currentLocation.enter) || enter)
+    // console.log(!index ? 'enter' : 'leave')
+    // console.log('--------')
+
     return React__default.createElement(TransitionView, {
       key: view.props.location.key,
       view: view,
-      enter: currentLocation && currentLocation.enter || enter,
       leave: currentLocation && currentLocation.leave || leave,
-      usual: currentLocation && currentLocation.usual || usual,
+      usual: currentLocation && view.props.location.pathname === currentLocation.pathname && currentLocation.usual || usual,
+      enter: currentLocation && view.props.location.pathname === currentLocation.pathname && currentLocation.enter || enter,
       mode: currentLocation && currentLocation.mode || mode,
       isKeep: isKeep,
       skipEnterAnimation: isKeep,
