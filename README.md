@@ -73,6 +73,7 @@ List of props:
 | **enter**    | object   | `{ opacity: 0, config: 'stiff' }` | From-values, when the view is entering. Accepts also callbacks and react-spring-`config`.    |
 | **usual**    | object   | `{ opacity: 1 }`                  | Normal state of the view. Only accepts opacity and transform (no extra config or callbacks!) |
 | **leave**    | object   | `{ opacity: 0, config: 'stiff' }` | To-Values, when the view is leaving. Accepts also callbacks and react-spring-`config`.       |
+| **style**    | object   | `null`                            | Style the views-wrapper (which is a div with class `views`).                                 |
 
 ### Transition-Mode
 
@@ -170,6 +171,7 @@ List of props:
 | **usual** | object   | `{ opacity: 1, config: 'stiff' }` | Normal state of the view.                        |
 | **leave** | object   | `{ opacity: 0, config: 'stiff' }` | To-Values, when the view is leaving.             |
 | **y**     | number   | `0`                               | Scroll position of the next view.                |
+| **style** | object   | `null`                            | Style the Link.                                  |
 
 ## useTransitionStore
 
