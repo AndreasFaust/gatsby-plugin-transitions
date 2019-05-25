@@ -66,14 +66,14 @@ export default Layout;
 
 List of props:
 
-| **Name**     | **Type** | **Default**                       | **Description**                                                                              |
-| :----------- | :------- | :-------------------------------- | :------------------------------------------------------------------------------------------- |
-| **location** | Object   | `null`                            | **required.** Gatsby’s location-object.                                                      |
-| **mode**     | String   | `'successive'`                    | Transition-mode: `'successive'` or `'immediate'`                                             |
-| **enter**    | object   | `{ opacity: 0, config: 'stiff' }` | From-values, when the view is entering. Accepts also callbacks and react-spring-`config`.    |
-| **usual**    | object   | `{ opacity: 1 }`                  | Normal state of the view. Only accepts opacity and transform (no extra config or callbacks!) |
-| **leave**    | object   | `{ opacity: 0, config: 'stiff' }` | To-Values, when the view is leaving. Accepts also callbacks and react-spring-`config`.       |
-| **style**    | object   | `null`                            | Style the views-wrapper (which is a div with class `views`).                                 |
+| **Name**     | **Type** | **Default**                       | **Description**                                                                           |
+| :----------- | :------- | :-------------------------------- | :---------------------------------------------------------------------------------------- |
+| **location** | Object   | `null`                            | **required.** Gatsby’s location-object.                                                   |
+| **mode**     | String   | `'successive'`                    | Transition-mode: `'successive'` or `'immediate'`                                          |
+| **enter**    | object   | `{ opacity: 0, config: 'stiff' }` | From-values, when the view is entering. Accepts also callbacks and react-spring-`config`. |
+| **usual**    | object   | `{ opacity: 1 }`                  | Normal state of the view.                                                                 |
+| **leave**    | object   | `{ opacity: 0, config: 'stiff' }` | To-Values, when the view is leaving. Accepts also callbacks and react-spring-`config`.    |
+| **style**    | object   | `null`                            | Style the views-wrapper (which is a div with class `views`).                              |
 
 ### Transition-Mode
 
@@ -89,25 +89,25 @@ Animated are currently only the keys `opacity` and `transform`.
 
 From-values, when the view is entering.
 
-Props: `opacity`, `tranform`,
-Callbacks: `onStart`, `onFrame`, `onRest`
-Config: react-spring-`config`-object
+- Props: `opacity`, `transform`,
+- Callbacks: `onStart`, `onFrame`, `onRest`
+- Config: react-spring-`config`-object
 
 #### `usual`
 
 Normal animation-state of the view.
 
-Props: `opacity`, `tranform`,
-Callbacks: none
-config: none — define with `enter` and `leave`!
+- Props: `opacity`, `transform`,
+- Callbacks: none
+- config: none — define with `enter` and `leave`!
 
 #### `leave`
 
 To-Values, when the view is leaving.
 
-Props: `opacity`, `tranform`,
-Callbacks: `onStart`, `onFrame`, `onRest`
-Config: react-spring-`config`-object
+- Props: `opacity`, `transform`,
+- Callbacks: `onStart`, `onFrame`, `onRest`
+- Config: react-spring-`config`-object
 
 #### config
 
