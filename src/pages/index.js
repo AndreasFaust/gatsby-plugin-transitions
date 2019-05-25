@@ -15,25 +15,29 @@ const IndexPage = ({ location }) => (
         to='/page-2'
         leave={{
           opacity: 0,
-          transform: 'translate3d(0,-100vh,0) scale3d(1, 1, 1)',
+          // transform: 'translate3d(0,-100vh,0)',
           config: {
             // duration: 3000,
             clamp: true
-          },
-          onStart: () => {
-            console.log('ICH BIN ONSTART??')
           }
+          // onStart: () => {
+          //   console.log('ICH BIN ONSTART??')
+          // }
+        }}
+        usual={{
+          transform: 'translate3d(0,0vh,0)',
+          opacity: 1
         }}
         enter={{
           opacity: 0,
-          transform: 'translate3d(0,20vh,0) scale3d(1, 1, 1)'
+          transform: 'translate3d(0,20vh,0)'
           // config: {
           //   duration: 3000,
           //   clamp: true
           // }
         }}
-        y={1000}
-        mode='immediate'
+        // y={1000}
+        // mode='immediate'
       >
         Go to page 2
       </TransitionLink>

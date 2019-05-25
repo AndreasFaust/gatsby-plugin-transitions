@@ -1507,10 +1507,12 @@ var TransitionView = function TransitionView(_ref) {
               window.scrollTo(0, y);
             }
 
-            if (typeof usual.onStart === 'function') usual.onStart(props);else if (typeof enter.onStart === 'function') enter.onStart(props);
+            if (typeof usual.onStart === 'function') usual.onStart(props);
+            if (typeof enter.onStart === 'function') enter.onStart(props);
           },
           onFrame: function onFrame(props) {
-            if (typeof usual.onFrame === 'function') usual.onFrame(props);else if (typeof enter.onFrame === 'function') enter.onFrame(props);
+            if (typeof usual.onFrame === 'function') usual.onFrame(props);
+            if (typeof enter.onFrame === 'function') enter.onFrame(props);
           },
           onRest: function onRest(props) {
             if (isKeep) {
@@ -1531,7 +1533,8 @@ var TransitionView = function TransitionView(_ref) {
               window.scrollTo(0, y);
             }
 
-            if (typeof usual.onRest === 'function') usual.onRest(props);else if (typeof enter.onRest === 'function') enter.onRest(props);
+            if (typeof usual.onRest === 'function') usual.onRest(props);
+            if (typeof enter.onRest === 'function') enter.onRest(props);
             dispatch({
               type: 'HAS_ENTERED'
             });
