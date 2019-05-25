@@ -1,16 +1,23 @@
 import React, { useEffect, useState } from 'react'
-import { Link, navigate } from 'gatsby'
+// import { Link } from 'gatsby'
 // import { useTransitionStore } from '../transitions'
+import { TransitionLink } from '../transitions'
 
 const SecondPage = ({ location }) => {
   // const [, dispatch] = useTransitionStore()
   // useEffect(() => {
   //   function onScroll () {
   //     if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 2) {
-  //       // dispatch({ type: 'RETURN_TO_KEPT' })
-  //       window.setTimeout(() => {
-  //         navigate('/')
-  //       }, 500)
+  //       dispatch({
+  //         type: 'NAVIGATE',
+  //         to: '/',
+  //         leave: {
+  //           opacity: 0,
+  //           transform: 'translate3d(0, -50vh, 0)',
+  //           config: 'stiff'
+  //         },
+  //         y: 1000
+  //       })
   //     }
   //   }
   //   window.addEventListener('scroll', onScroll)
@@ -22,8 +29,27 @@ const SecondPage = ({ location }) => {
       <div className='content__inner'>
         <h1>Hi from the second page</h1>
         <p>Welcome to page 2</p>
-        {/* <Link to='/' state={{ y: 500 }}>Back to Home</Link> */}
-        <Link to='/'>Back to Home</Link>
+        <TransitionLink
+          style={{ color: 'yellow' }}
+          to='/page-3'
+          className='link-button'
+          leave={{
+            opacity: 0,
+            transform: 'translate3d(0vh,0vh,0) scale3d(1, 1, 10) rotate(180deg)'
+          }}
+          usual={{
+            transform: 'translate3d(0vh,0vh,0) scale3d(1, 1, 1) rotate(0deg)',
+            opacity: 1
+          }}
+          enter={{
+            opacity: 0,
+            transform: 'translate3d(0vh,0vh,0) scale3d(1, 1, 10) rotate(180deg)'
+          }}
+          mode='immediate'
+        >
+        I also have a special animation!<br />
+        Go to page 3
+        </TransitionLink>
       </div>
     </div>
   )

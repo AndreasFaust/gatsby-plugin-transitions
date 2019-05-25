@@ -7,7 +7,7 @@ const SecondPage = ({ location }) => (
     <div className='content__inner'>
       <h1>Hi from the third page</h1>
       <p>Welcome to page 3</p>
-      <Link to='/'>Back to Home</Link>
+      <Link className='' to='/'>Back to Home</Link>
     </div>
   </div>
 )

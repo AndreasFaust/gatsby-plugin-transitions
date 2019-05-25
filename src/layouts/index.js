@@ -16,50 +16,16 @@ const Layout = ({
         mode={mode}
         enter={{
           opacity: 0,
-          // transform: 'translate3d(0,0vh,0) scale3d(1, 1, 1)',
-          config: {
-            // duration: 30000,
-            // mass: 1,
-            // tension: 210,
-            // friction: 20,
-            clamp: true
-          },
-          onRest: (props) => {
-            // console.log('onRest!')
-            // console.log(props)
-          }
+          transform: 'translate3d(0,20vh,0) scale3d(1, 1, 1) rotate(0deg)'
         }}
         usual={{
           opacity: 1,
-          // transform: 'translate3d(0,0vh,0) scale3d(1, 1, 1)',
-          config: {
-            // duration: 30000,
-            // mass: 1,
-            // tension: 210,
-            // friction: 20,
-            clamp: true
-          }
+          transform: 'translate3d(0vh,0vh,0) scale3d(1, 1, 1) rotate(0deg)'
           // onRest: (props) => { console.log(props) }
         }}
         leave={{
           opacity: 0,
-          // transform: 'translate3d(0,0vh,0) scale3d(1, 1, 1)',
-          config: {
-            // duration: 30000,
-            mass: 1,
-            tension: 210,
-            friction: 20,
-            clamp: true
-          }
-          // onStart: () => {
-          //   console.log('WARUM??')
-          // }
-          // config: {
-          //   mass: 1,
-          //   tension: 210,
-          //   friction: 20,
-          //   clamp: true
-          // }
+          transform: 'translate3d(0vh,0vh,0) scale3d(1, 1, 10) rotate(0deg)'
         }}
       >
         {children}

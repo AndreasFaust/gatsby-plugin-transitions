@@ -1,11 +1,7 @@
 import React from 'react'
 import { TransitionLink } from '../transitions'
-// import { Transition } from 'transitions'
 
 const IndexPage = ({ location }) => (
-  // <Transition
-  //   location={location}
-  // >
   <div className='content content--1'>
     <div className='content__inner'>
       <h1>gatsby-plugin-transitions</h1>
@@ -13,32 +9,23 @@ const IndexPage = ({ location }) => (
       <p>Now go build something great.</p>
       <TransitionLink
         to='/page-2'
+        className='link-button'
         leave={{
           opacity: 0,
-          // transform: 'translate3d(0,-100vh,0)',
-          config: {
-            // duration: 3000,
-            clamp: true
-          }
-          // onStart: () => {
-          //   console.log('ICH BIN ONSTART??')
-          // }
+          transform: 'translate3d(100vh,0vh,0) scale3d(1, 1, 1) rotate(0deg)'
         }}
         usual={{
-          transform: 'translate3d(0,0vh,0)',
+          transform: 'translate3d(0vh,0vh,0) scale3d(1, 1, 1) rotate(0deg)',
           opacity: 1
         }}
         enter={{
           opacity: 0,
-          transform: 'translate3d(0,20vh,0)'
-          // config: {
-          //   duration: 3000,
-          //   clamp: true
-          // }
+          transform: 'translate3d(100vh,0vh,0) scale3d(1, 1, 1) rotate(0deg)'
         }}
-        // y={1000}
-        // mode='immediate'
+        mode='immediate'
       >
+        I have a special animation!<br />
+        And mode 'immediate'!<br />
         Go to page 2
       </TransitionLink>
     </div>
