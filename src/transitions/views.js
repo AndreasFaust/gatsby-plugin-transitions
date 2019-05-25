@@ -14,7 +14,7 @@ function getY ({ view, keep, currentLocation }) {
   return 0
 }
 
-const TransitionViews = ({ location, enter, usual, leave, mode, children }) => {
+const TransitionViews = ({ location, enter, usual, leave, mode, children, style }) => {
   const [{ to, currentLocation, views, queue, keep, modeInterim }, dispatch] = useStateContext()
 
   useEffect(() => {
@@ -50,17 +50,10 @@ const TransitionViews = ({ location, enter, usual, leave, mode, children }) => {
   }, [children.key])
 
   return (
-    <div className='views'>
+    <div className='views' style={style}>
       {views.map((view, index) => {
         if (!view) return null
         const isKeep = keep && keep.props.location.pathname === view.props.location.pathname
-        // console.log(view.props.location.pathname)
-        // console.log(currentLocation.pathname)
-        // console.log((currentLocation && currentLocation.leave) || leave)
-        // console.log((currentLocation && view.props.location.pathname === currentLocation.pathname && currentLocation.usual) || usual)
-        // console.log((currentLocation && currentLocation.enter) || enter)
-        // console.log(!index ? 'enter' : 'leave')
-        // console.log('--------')
         return (
           <View
             key={view.props.location.key}

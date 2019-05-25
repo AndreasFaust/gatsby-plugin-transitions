@@ -66,14 +66,13 @@ export default Layout;
 
 List of props:
 
-| **Name**     | **Type** | **Default**                       | **Description**                                  |
-| :----------- | :------- | :-------------------------------- | :----------------------------------------------- |
-| **location** | Object   | `null`                            | **required.** Gatsby’s location-object.          |
-| **mode**     | String   | `'successive'`                    | Transition-mode: `'successive'` or `'immediate'` |
-| **enter**    | object   | `{ opacity: 0, config: 'stiff' }` | From-values, when the view is entering           |
-| **usual**    | object   | `{ opacity: 1, config: 'stiff' }` | Normal state of the view.                        |
-| **leave**    | object   | `{ opacity: 0, config: 'stiff' }` | To-Values, when the view is leaving.             |
-| **y**        | number   | `0`                               | Scroll position of the next view.                |
+| **Name**     | **Type** | **Default**                       | **Description**                                                                              |
+| :----------- | :------- | :-------------------------------- | :------------------------------------------------------------------------------------------- |
+| **location** | Object   | `null`                            | **required.** Gatsby’s location-object.                                                      |
+| **mode**     | String   | `'successive'`                    | Transition-mode: `'successive'` or `'immediate'`                                             |
+| **enter**    | object   | `{ opacity: 0, config: 'stiff' }` | From-values, when the view is entering. Accepts also callbacks and react-spring-`config`.    |
+| **usual**    | object   | `{ opacity: 1 }`                  | Normal state of the view. Only accepts opacity and transform (no extra config or callbacks!) |
+| **leave**    | object   | `{ opacity: 0, config: 'stiff' }` | To-Values, when the view is leaving. Accepts also callbacks and react-spring-`config`.       |
 
 ### Transition-Mode
 
@@ -82,16 +81,32 @@ List of props:
 
 ### Default-Springs
 
-You can enter default-springs for all animation-states:
-
-- `enter`: From-values, when the view is entering.
-- `usual`: Normal animation-state of the view.
-- `leave`: To-Values, when the view is leaving.
-
-#### opacity and transform
-
-These props accept a regular [**react-spring**-object](https://www.react-spring.io/docs/hooks/api).
+You can enter default-springs for all animation-states. These props accept a regular [**react-spring**-object](https://www.react-spring.io/docs/hooks/api).
 Animated are currently only the keys `opacity` and `transform`.
+
+#### `enter`
+
+From-values, when the view is entering.
+
+Props: `opacity`, `tranform`,
+Callbacks: `onStart`, `onFrame`, `onRest`
+Config: react-spring-`config`-object
+
+#### `usual`
+
+Normal animation-state of the view.
+
+Props: `opacity`, `tranform`,
+Callbacks: none
+config: none — define with `enter` and `leave`!
+
+#### `leave`
+
+To-Values, when the view is leaving.
+
+Props: `opacity`, `tranform`,
+Callbacks: `onStart`, `onFrame`, `onRest`
+Config: react-spring-`config`-object
 
 #### config
 
@@ -119,7 +134,7 @@ const MyComponent = () => (
       leave={{
         opacity: 0,
         transform: "translate3d(100vh,0vh,0)",
-        config: "slow"
+        config: { mass: 1, tension: 180, friction: 12, clamp: true }
       }}
       enter={{
         opacity: 0,
@@ -261,6 +276,10 @@ const MyComponent = () => (
 
 export default MyComponent;
 ```
+
+### Use `clamp: true` to speed up you animations!
+
+Spring-Animations "wobble", which takes extra time. To make the animations snappy, define `clamp: true` in the `config`-object.
 
 ## To-Do
 

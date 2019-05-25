@@ -1500,11 +1500,9 @@ var TransitionView = function TransitionView(_ref) {
               window.scrollTo(0, y);
             }
 
-            if (typeof usual.onStart === 'function') usual.onStart(props);
             if (typeof enter.onStart === 'function') enter.onStart(props);
           },
           onFrame: function onFrame(props) {
-            if (typeof usual.onFrame === 'function') usual.onFrame(props);
             if (typeof enter.onFrame === 'function') enter.onFrame(props);
           },
           onRest: function onRest(props) {
@@ -1526,7 +1524,6 @@ var TransitionView = function TransitionView(_ref) {
               window.scrollTo(0, y);
             }
 
-            if (typeof usual.onRest === 'function') usual.onRest(props);
             if (typeof enter.onRest === 'function') enter.onRest(props);
             dispatch({
               type: 'HAS_ENTERED'
@@ -1582,9 +1579,7 @@ var TransitionView = function TransitionView(_ref) {
     className: "view-container",
     style: _objectSpread({
       width: '100%',
-      gridArea: 'View',
       willChange: mode === 'immediate' && 'transform',
-      gridTemplateAreas: 'View',
       top: 0
     }, styles)
   }, React.createElement(animated.div, {
@@ -1635,7 +1630,8 @@ var TransitionViews = function TransitionViews(_ref2) {
       usual = _ref2.usual,
       leave = _ref2.leave,
       mode = _ref2.mode,
-      children = _ref2.children;
+      children = _ref2.children,
+      style = _ref2.style;
 
   var _useStateContext = useStateContext(),
       _useStateContext2 = _slicedToArray(_useStateContext, 2),
@@ -1690,17 +1686,11 @@ var TransitionViews = function TransitionViews(_ref2) {
     }
   }, [children.key]);
   return React.createElement("div", {
-    className: "views"
+    className: "views",
+    style: style
   }, views.map(function (view, index) {
     if (!view) return null;
-    var isKeep = keep && keep.props.location.pathname === view.props.location.pathname; // console.log(view.props.location.pathname)
-    // console.log(currentLocation.pathname)
-    // console.log((currentLocation && currentLocation.leave) || leave)
-    // console.log((currentLocation && view.props.location.pathname === currentLocation.pathname && currentLocation.usual) || usual)
-    // console.log((currentLocation && currentLocation.enter) || enter)
-    // console.log(!index ? 'enter' : 'leave')
-    // console.log('--------')
-
+    var isKeep = keep && keep.props.location.pathname === view.props.location.pathname;
     return React.createElement(TransitionView, {
       key: view.props.location.key,
       view: view,
@@ -1746,7 +1736,9 @@ TransitionProvider.propTypes = {
   mode: propTypes.oneOf(['successive', 'immediate']),
   children: propTypes.node,
   enter: propTypes.object,
-  leave: propTypes.object
+  usual: propTypes.object,
+  leave: propTypes.object,
+  style: propTypes.object
 };
 TransitionProvider.defaultProps = {
   mode: 'successive',
@@ -1763,7 +1755,8 @@ TransitionProvider.defaultProps = {
   leave: {
     opacity: 0,
     config: 'stiff'
-  }
+  },
+  style: null
 };
 
 export { TransitionLink, TransitionProvider, useStateContext as useTransitionStore };

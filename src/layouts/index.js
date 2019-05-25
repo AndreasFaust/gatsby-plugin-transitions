@@ -16,16 +16,17 @@ const Layout = ({
         mode={mode}
         enter={{
           opacity: 0,
-          transform: 'translate3d(0,20vh,0) scale3d(1, 1, 1) rotate(0deg)'
+          transform: 'translate3d(0,20vh,0) scale3d(1, 1, 1) rotate(0deg)',
+          config: { clamp: true }
         }}
         usual={{
           opacity: 1,
           transform: 'translate3d(0vh,0vh,0) scale3d(1, 1, 1) rotate(0deg)'
-          // onRest: (props) => { console.log(props) }
         }}
         leave={{
           opacity: 0,
-          transform: 'translate3d(0vh,0vh,0) scale3d(1, 1, 10) rotate(0deg)'
+          transform: 'translate3d(0vh,0vh,0) scale3d(2, 2, 1) rotate(0deg)',
+          config: { clamp: true }
         }}
       >
         {children}

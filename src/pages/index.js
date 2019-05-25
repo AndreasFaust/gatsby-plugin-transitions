@@ -12,7 +12,8 @@ const IndexPage = ({ location }) => (
         className='link-button'
         leave={{
           opacity: 0,
-          transform: 'translate3d(100vh,0vh,0) scale3d(1, 1, 1) rotate(0deg)'
+          transform: 'translate3d(100vh,0vh,0) scale3d(1, 1, 1) rotate(0deg)',
+          config: { clamp: true }
         }}
         usual={{
           transform: 'translate3d(0vh,0vh,0) scale3d(1, 1, 1) rotate(0deg)',
@@ -20,7 +21,8 @@ const IndexPage = ({ location }) => (
         }}
         enter={{
           opacity: 0,
-          transform: 'translate3d(100vh,0vh,0) scale3d(1, 1, 1) rotate(0deg)'
+          transform: 'translate3d(100vh,0vh,0) scale3d(1, 1, 1) rotate(0deg)',
+          config: { clamp: true }
         }}
         mode='immediate'
       >

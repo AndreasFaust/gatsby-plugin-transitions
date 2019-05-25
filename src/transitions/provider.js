@@ -27,7 +27,9 @@ TransitionProvider.propTypes = {
   mode: propTypes.oneOf(['successive', 'immediate']),
   children: propTypes.node,
   enter: propTypes.object,
-  leave: propTypes.object
+  usual: propTypes.object,
+  leave: propTypes.object,
+  style: propTypes.object
 }
 
 TransitionProvider.defaultProps = {
@@ -36,7 +38,8 @@ TransitionProvider.defaultProps = {
   children: null,
   enter: { opacity: 0, config: 'stiff' },
   usual: { opacity: 1, config: 'stiff' },
-  leave: { opacity: 0, config: 'stiff' }
+  leave: { opacity: 0, config: 'stiff' },
+  style: null
 }
 
 export default TransitionProvider

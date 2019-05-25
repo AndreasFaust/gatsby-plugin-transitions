@@ -35,7 +35,8 @@ const SecondPage = ({ location }) => {
           className='link-button'
           leave={{
             opacity: 0,
-            transform: 'translate3d(0vh,0vh,0) scale3d(1, 1, 10) rotate(180deg)'
+            transform: 'translate3d(0vh,0vh,0) scale3d(1, 1, 1) rotate(180deg)',
+            config: { clamp: true }
           }}
           usual={{
             transform: 'translate3d(0vh,0vh,0) scale3d(1, 1, 1) rotate(0deg)',
@@ -43,7 +44,8 @@ const SecondPage = ({ location }) => {
           }}
           enter={{
             opacity: 0,
-            transform: 'translate3d(0vh,0vh,0) scale3d(1, 1, 10) rotate(180deg)'
+            transform: 'translate3d(0vh,0vh,0) scale3d(1, 1, 1) rotate(180deg)',
+            config: { clamp: true }
           }}
           mode='immediate'
         >

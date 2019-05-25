@@ -33,11 +33,9 @@ const TransitionView = ({
             if (mode === 'successive' || isKeep) {
               window.scrollTo(0, y)
             }
-            if (typeof usual.onStart === 'function') usual.onStart(props)
             if (typeof enter.onStart === 'function') enter.onStart(props)
           },
           onFrame: (props) => {
-            if (typeof usual.onFrame === 'function') usual.onFrame(props)
             if (typeof enter.onFrame === 'function') enter.onFrame(props)
           },
           onRest: (props) => {
@@ -53,7 +51,6 @@ const TransitionView = ({
               })
               window.scrollTo(0, y)
             }
-            if (typeof usual.onRest === 'function') usual.onRest(props)
             if (typeof enter.onRest === 'function') enter.onRest(props)
             dispatch({ type: 'HAS_ENTERED' })
           }
@@ -95,9 +92,7 @@ const TransitionView = ({
       className='view-container'
       style={{
         width: '100%',
-        gridArea: 'View',
         willChange: mode === 'immediate' && 'transform',
-        gridTemplateAreas: 'View',
         top: 0,
         ...styles
       }}
