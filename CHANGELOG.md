@@ -4,6 +4,12 @@
 
 *  fix animation-states at per-link. (d51b6b10)
 
+#### 1.6.2 (2019-05-25)
+
+##### Bug Fixes
+
+*  fix animation-states at per-link. (d51b6b10)
+
 #### 1.6.1 (2019-05-25)
 
 ### 1.6.0 (2019-05-24)
