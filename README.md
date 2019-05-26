@@ -62,6 +62,53 @@ export default Layout;
 
 🎉 **Voila!** You have smooth animated page-transitions! **Now customize these!**
 
+### 4. Customize!
+
+```jsx
+import React, { useState } from "react";
+import { TransitionProvider } from "gatsby-plugin-transitions";
+import Header from "./header"; //
+
+const Layout = ({ location, children }) => {
+  return (
+    <>
+      <TransitionProvider
+        location={location}
+        mode="immediate"
+        enter={{
+          opacity: 0,
+          transform: "translate3d(0,20vh,0) scale3d(1, 1, 1) rotate(0deg)",
+          config: {
+            mass: 1,
+            tension: 210,
+            friction: 20,
+            clamp: true
+          }
+        }}
+        usual={{
+          opacity: 1,
+          transform: "translate3d(0vh,0vh,0) scale3d(1, 1, 1) rotate(0deg)"
+        }}
+        leave={{
+          opacity: 0,
+          transform: "translate3d(0vh,0vh,0) scale3d(2, 2, 1) rotate(180deg)",
+          config: {
+            duration: 1000,
+            clamp: true
+          }
+        }}
+      >
+        {children}
+      </TransitionProvider>
+      // This Header is an example for a component, that should remain between routes
+      <Header />
+    </>
+  );
+};
+
+export default Layout;
+```
+
 ## TransitionProvider
 
 List of props:
