@@ -1,3 +1,9 @@
+#### 1.8.9 (2019-05-26)
+
+##### Documentation Changes
+
+*  Small fix. (a56c85c3)
+
 #### 1.8.8 (2019-05-26)
 
 ##### Documentation Changes
