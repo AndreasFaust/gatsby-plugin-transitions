@@ -1672,7 +1672,7 @@ var TransitionViews = function TransitionViews(_ref2) {
     if (currentMode === 'successive') {
       if (views.filter(function (view) {
         return view;
-      }).length && !queue) {
+      }).length) {
         dispatch({
           type: 'ADD_QUEUE',
           view: children

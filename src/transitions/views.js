@@ -36,9 +36,9 @@ const TransitionViews = ({ location, enter, usual, leave, mode, children, style 
   }, [location.pathname])
 
   useEffect(() => {
-    const currentMode = modeInterim || mode
+    const currentMode = modeInterim || mode
     if (currentMode === 'successive') {
-      if (views.filter(view => view).length && !queue) {
+      if (views.filter(view => view).length) {
         dispatch({ type: 'ADD_QUEUE', view: children })
       } else {
         dispatch({ type: 'ADD_VIEW_DIRECTLY', view: children })
