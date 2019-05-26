@@ -1,3 +1,9 @@
+#### 1.8.7 (2019-05-26)
+
+##### Bug Fixes
+
+*  Fix callbacks. (c46a0f77)
+
 #### 1.8.6 (2019-05-26)
 
 ##### Documentation Changes
