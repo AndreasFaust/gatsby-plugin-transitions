@@ -67,7 +67,8 @@ export default Layout;
 ```jsx
 import React, { useState } from "react";
 import { TransitionProvider } from "gatsby-plugin-transitions";
-import Header from "./header"; //
+// Example Header-Component (see below)
+import Header from "./header";
 
 const Layout = ({ location, children }) => {
   return (
