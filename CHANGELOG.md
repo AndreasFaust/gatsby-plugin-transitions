@@ -1,3 +1,9 @@
+#### 1.8.8 (2019-05-26)
+
+##### Documentation Changes
+
+*  Add topic 'navigate programmatically'. (82691e6a)
+
 #### 1.8.7 (2019-05-26)
 
 ##### Bug Fixes
