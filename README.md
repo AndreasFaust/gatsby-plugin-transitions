@@ -255,7 +255,7 @@ export default MyComponent;
 
 ## Navigate programmatically
 
-To navigate programmatically you need to dispatch the "NAVIGATE"-Action from the `TransitionStore`. It takes the same props as `TransitionLink`.
+To navigate programmatically you need to dispatch the `NAVIGATE`-action from the `TransitionStore`. It takes the same props as `TransitionLink`.
 
 **Example:** Navigate, when the user scrolls to the bottom of the page:
 
