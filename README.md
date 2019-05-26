@@ -93,8 +93,7 @@ const Layout = ({ location, children }) => {
           opacity: 0,
           transform: "translate3d(0vh,0vh,0) scale3d(2, 2, 1) rotate(180deg)",
           config: {
-            duration: 1000,
-            clamp: true
+            duration: 1000
           }
         }}
       >
