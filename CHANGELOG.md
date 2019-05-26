@@ -1,3 +1,9 @@
+#### 1.8.6 (2019-05-26)
+
+##### Documentation Changes
+
+*  fix docs. (e6454d97)
+
 #### 1.8.5 (2019-05-26)
 
 ##### Documentation Changes
