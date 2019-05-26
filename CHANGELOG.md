@@ -1,3 +1,9 @@
+#### 1.8.5 (2019-05-26)
+
+##### Documentation Changes
+
+*  fix docs. (740f87b3)
+
 #### 1.8.4 (2019-05-26)
 
 ##### Documentation Changes
