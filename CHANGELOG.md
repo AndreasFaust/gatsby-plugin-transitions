@@ -1,3 +1,9 @@
+#### 1.8.3 (2019-05-26)
+
+##### Bug Fixes
+
+*  fix successive-bug. (d06056ea)
+
 #### 1.8.2 (2019-05-25)
 
 ##### Documentation Changes
