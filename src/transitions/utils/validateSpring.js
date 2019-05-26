@@ -24,8 +24,13 @@ export default function validateSpring (spring) {
         }
         break
 
-      default:
-        validated[key] = spring[key]
+      case 'onStart':
+      case 'onFrame':
+      case 'onRest':
+        if (typeof spring[key] === 'function') {
+          validated[key] = spring[key]
+        }
+        break
     }
   })
   return validated

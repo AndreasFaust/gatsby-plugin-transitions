@@ -17,7 +17,10 @@ const Layout = ({
         enter={{
           opacity: 0,
           transform: 'translate3d(0,20vh,0) scale3d(1, 1, 1) rotate(0deg)',
-          config: { clamp: true }
+          // config: { duration: 3000 },
+          onStart: () => {
+            console.log('HELLO WORLD!')
+          }
         }}
         usual={{
           opacity: 1,
@@ -25,8 +28,8 @@ const Layout = ({
         }}
         leave={{
           opacity: 0,
-          transform: 'translate3d(0vh,0vh,0) scale3d(2, 2, 1) rotate(0deg)',
-          config: { clamp: true }
+          transform: 'translate3d(0vh,0vh,0) scale3d(2, 2, 1) rotate(0deg)'
+          // config: { clamp: true }
         }}
       >
         {children}

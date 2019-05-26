@@ -42,7 +42,7 @@ exports.shouldUpdateScroll = () => {
 
 ### 3. Create default Layout-file
 
-Activate `gatsby-plugin-layout`. Either do it your own way, or take the default path:
+Activate `gatsby-plugin-layout`. Either do it your own way, or take the default way:
 
 - Create the folder `src/layouts` and the file `src/layouts/index.js`.
 - Here you need to wrap all `children` into the component `TransitionProvider`
@@ -84,6 +84,9 @@ const Layout = ({ location, children }) => {
             tension: 210,
             friction: 20,
             clamp: true
+          },
+          onRest: () => {
+            console.log("Hello, World!");
           }
         }}
         usual={{
@@ -108,6 +111,8 @@ const Layout = ({ location, children }) => {
 
 export default Layout;
 ```
+
+### 5. Check out TransitionLink below for individual per-link-animations!
 
 ## TransitionProvider
 
@@ -165,6 +170,7 @@ Or pass in the name of a **react-spring**-default (`default`, `gentle`, `wobbly`
 ## TransitionLink
 
 `gatsby-plugin-transition` works out of the box with Gatsby's default `Link`-component. If you want to apply custom animations to certain links, use `TransitionLink`.
+Unfortunately `TransitionLink` can currently only used as child of `TransitionProvider`.
 
 ```jsx
 import React from "react";
@@ -187,7 +193,10 @@ const MyComponent = () => (
       enter={{
         opacity: 0,
         transform: "translate3d(100vh,0vh,0)",
-        config: "stiff"
+        config: "stiff",
+        onRest: () => {
+          console.log("Hello, World!");
+        }
       }}
       usual={{
         transform: "translate3d(0vh,0vh,0)",
@@ -223,6 +232,7 @@ List of props:
 ## useTransitionStore
 
 A hook, that exposes the plugin’s state-management.
+Unfortunately it is currently not possible to use `useTransitionStore` outside of `TransitionProvider`.
 It returns an `Array` with 2 elements:
 
 1.  **state** of type `object`
@@ -286,10 +296,6 @@ export default MyComponent;
 
 ## 🔥 Caution 🔥
 
-### Persistant values
-
-In react-spring the values of the previous animation persist. For example: If you want to execute a `onRest`-function only on `enter`, you have to overwrite it in `leave`!
-
 ### Keep animated props consistent!
 
 react-spring needs consistent props and transform-units.
@@ -326,9 +332,9 @@ const MyComponent = () => (
 export default MyComponent;
 ```
 
-### Use `clamp: true` to speed up you animations!
+### Use `clamp: true` to speed up your animations!
 
-Spring-Animations "wobble", which takes extra time. To make the animations snappy, define `clamp: true` in the `config`-object.
+Spring-Animations "wobble", which takes extra time. To make the animations snappier, define `clamp: true` in the `config`-object.
 
 ## To-Do
 

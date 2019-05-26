@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'gatsby'
+import { TransitionLink } from '../transitions'
 import Select from 'react-select'
 
 const options = [
@@ -52,7 +53,9 @@ const Header = ({ setMode }) => {
       <Link to='/page-2' className='header__link'>
         Page-2
       </Link>
-      <Link to='/page-3' className='header__link'>
+      <Link
+        to='/page-3' className='header__link'
+      >
         Page-3
       </Link>
       <div className='mode'>

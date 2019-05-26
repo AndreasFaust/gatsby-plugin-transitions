@@ -1271,8 +1271,14 @@ function validateSpring(spring) {
 
         break;
 
-      default:
-        validated[key] = spring[key];
+      case 'onStart':
+      case 'onFrame':
+      case 'onRest':
+        if (typeof spring[key] === 'function') {
+          validated[key] = spring[key];
+        }
+
+        break;
     }
   });
   return validated;
@@ -1484,7 +1490,11 @@ var TransitionView = function TransitionView(_ref) {
       setStyles = _useState2[1];
 
   var _useSpring = useSpring(function () {
-    return skipEnterAnimation ? usual : enter;
+    return skipEnterAnimation ? usual // because start-callback would be called if spread-operator (spring-bug?)
+    : {
+      opacity: enter.opacity,
+      transform: enter.transform
+    };
   }),
       _useSpring2 = _slicedToArray(_useSpring, 2),
       props = _useSpring2[0],
@@ -1495,7 +1505,7 @@ var TransitionView = function TransitionView(_ref) {
       case 'enter':
         set(_objectSpread({}, usual, {
           config: enter.config,
-          onStart: function onStart() {
+          onStart: function onStart(props) {
             if (mode === 'successive' || isKeep) {
               window.scrollTo(0, y);
             }
@@ -1550,6 +1560,7 @@ var TransitionView = function TransitionView(_ref) {
         }
 
         set(_objectSpread({}, leave, {
+          config: leave.config,
           onStart: function onStart(props) {
             if (typeof leave.onStart === 'function') leave.onStart(props);
           },
@@ -1639,7 +1650,6 @@ var TransitionViews = function TransitionViews(_ref2) {
       to = _useStateContext2$.to,
       currentLocation = _useStateContext2$.currentLocation,
       views = _useStateContext2$.views,
-      queue = _useStateContext2$.queue,
       keep = _useStateContext2$.keep,
       modeInterim = _useStateContext2$.modeInterim,
       dispatch = _useStateContext2[1];

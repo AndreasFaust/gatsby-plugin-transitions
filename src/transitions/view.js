@@ -21,7 +21,11 @@ const TransitionView = ({
   const [props, set] = useSpring(() => {
     return skipEnterAnimation
       ? usual
-      : enter
+      // because start-callback would be called if spread-operator (spring-bug?)
+      : {
+        opacity: enter.opacity,
+        transform: enter.transform
+      }
   })
   useEffect(() => {
     switch (action) {
@@ -29,7 +33,7 @@ const TransitionView = ({
         set({
           ...usual,
           config: enter.config,
-          onStart: () => {
+          onStart: (props) => {
             if (mode === 'successive' || isKeep) {
               window.scrollTo(0, y)
             }
@@ -68,6 +72,7 @@ const TransitionView = ({
         }
         set({
           ...leave,
+          config: leave.config,
           onStart: (props) => {
             if (typeof leave.onStart === 'function') leave.onStart(props)
           },
