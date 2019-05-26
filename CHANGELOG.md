@@ -1,3 +1,9 @@
+#### 1.8.4 (2019-05-26)
+
+##### Documentation Changes
+
+*  extend docs. (4ff9238d)
+
 #### 1.8.3 (2019-05-26)
 
 ##### Bug Fixes
