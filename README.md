@@ -253,8 +253,11 @@ const MyComponent = () => {
 export default MyComponent;
 ```
 
-**Or route to another page, when the user scrolls to the bottom of the page:**
-Works the same way like `TransitionLink`!
+## Navigate programmatically
+
+To navigate programmatically you need to dispatch the "NAVIGATE"-Action from the `TransitionStore`. It takes the same props as `TransitionLink`.
+
+**Example:** Navigate, when the user scrolls to the bottom of the page:
 
 ```jsx
 import React, { useEffect, useState } from "react";
@@ -270,7 +273,7 @@ const MyComponent = () => {
       ) {
         dispatch({
           type: "NAVIGATE",
-          to: "/",
+          to: "/another-page",
           leave: {
             opacity: 0,
             transform: "translate3d(0, -50vh, 0)",
@@ -286,7 +289,7 @@ const MyComponent = () => {
 
   return (
     <div className="content" style={{ minHeight: "300vh" }}>
-      <h1>Scroll down to get back home!</h1>
+      <h1>Scroll down to navigate!</h1>
     </div>
   );
 };
