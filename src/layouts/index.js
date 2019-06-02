@@ -15,20 +15,20 @@ const Layout = ({
         location={location}
         mode={mode}
         enter={{
-          opacity: 0,
-          transform: 'translate3d(0,20vh,0) scale3d(1, 1, 1) rotate(0deg)',
-          // config: { duration: 3000 },
-          onStart: () => {
-            console.log('HELLO WORLD!')
-          }
+          opacity: 0
+          // transform: 'translate3d(0,20vh,0) scale3d(1, 1, 1) rotate(0deg)',
+          // // config: { duration: 3000 },
+          // onStart: () => {
+          //   console.log('HELLO WORLD!')
+          // }
         }}
         usual={{
-          opacity: 1,
-          transform: 'translate3d(0vh,0vh,0) scale3d(1, 1, 1) rotate(0deg)'
+          opacity: 1
+          // transform: 'translate3d(0vh,0vh,0) scale3d(1, 1, 1) rotate(0deg)'
         }}
         leave={{
-          opacity: 0,
-          transform: 'translate3d(0vh,0vh,0) scale3d(2, 2, 1) rotate(0deg)'
+          opacity: 0
+          // transform: 'translate3d(0vh,0vh,0) scale3d(2, 2, 1) rotate(0deg)'
           // config: { clamp: true }
         }}
       >

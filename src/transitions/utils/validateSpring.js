@@ -1,37 +1,34 @@
 import { config } from 'react-spring'
 
+function getConfig (springConfig) {
+  if (typeof config === 'string') {
+    return config.springConfig || {}
+  }
+  return springConfig || {}
+}
+
+function getCallback (callback) {
+  if (typeof callback === 'function') return callback
+  return null
+}
+
+function getOpacity (opacity) {
+  if (typeof opacity === 'number' && opacity >= 0) return opacity
+  return 1
+}
+
+function getTransform (transform) {
+  if (transform && typeof transform === 'string') return transform
+  return 'translate3d(0px, 0px, 0px)'
+}
+
 export default function validateSpring (spring) {
-  const validated = {}
-  Object.keys(spring).map(key => {
-    switch (key) {
-      case 'opacity':
-        if (typeof spring[key] === 'number') {
-          validated[key] = spring[key]
-        }
-        break
-
-      case 'transform':
-        if (spring[key] && typeof spring[key] === 'string') {
-          validated[key] = spring[key]
-        }
-        break
-
-      case 'config':
-        if (typeof spring[key] === 'string') {
-          validated[key] = config[spring[key]] || {}
-        } else {
-          validated[key] = spring[key]
-        }
-        break
-
-      case 'onStart':
-      case 'onFrame':
-      case 'onRest':
-        if (typeof spring[key] === 'function') {
-          validated[key] = spring[key]
-        }
-        break
-    }
-  })
-  return validated
+  return {
+    opacity: getOpacity(spring.opacity),
+    transform: getTransform(spring.transform),
+    config: getConfig(spring.config),
+    onStart: getCallback(spring.onStart),
+    onFrame: getCallback(spring.onFrame),
+    onRest: getCallback(spring.onRest)
+  }
 }

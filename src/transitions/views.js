@@ -14,8 +14,8 @@ function getY ({ view, keep, currentLocation }) {
   return 0
 }
 
-const TransitionViews = ({ location, enter, usual, leave, mode, children, style }) => {
-  const [{ to, currentLocation, views, keep, modeInterim }, dispatch] = useStateContext()
+const TransitionViews = ({ location, mode, children, style }) => {
+  const [{ enter, usual, leave, to, currentLocation, views, keep, modeInterim }, dispatch] = useStateContext()
 
   useEffect(() => {
     dispatch({

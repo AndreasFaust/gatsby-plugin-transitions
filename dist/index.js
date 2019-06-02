@@ -1251,44 +1251,38 @@ if (process.env.NODE_ENV !== 'production') {
 }
 });
 
+function getConfig(springConfig) {
+  if (typeof reactSpring.config === 'string') {
+    return reactSpring.config.springConfig || {};
+  }
+
+  return springConfig || {};
+}
+
+function getCallback(callback) {
+  if (typeof callback === 'function') return callback;
+  return null;
+}
+
+function getOpacity(opacity) {
+  if (typeof opacity === 'number' && opacity >= 0) return opacity;
+  return 1;
+}
+
+function getTransform(transform) {
+  if (transform && typeof transform === 'string') return transform;
+  return 'translate3d(0px, 0px, 0px)';
+}
+
 function validateSpring(spring) {
-  var validated = {};
-  Object.keys(spring).map(function (key) {
-    switch (key) {
-      case 'opacity':
-        if (typeof spring[key] === 'number') {
-          validated[key] = spring[key];
-        }
-
-        break;
-
-      case 'transform':
-        if (spring[key] && typeof spring[key] === 'string') {
-          validated[key] = spring[key];
-        }
-
-        break;
-
-      case 'config':
-        if (typeof spring[key] === 'string') {
-          validated[key] = reactSpring.config[spring[key]] || {};
-        } else {
-          validated[key] = spring[key];
-        }
-
-        break;
-
-      case 'onStart':
-      case 'onFrame':
-      case 'onRest':
-        if (typeof spring[key] === 'function') {
-          validated[key] = spring[key];
-        }
-
-        break;
-    }
-  });
-  return validated;
+  return {
+    opacity: getOpacity(spring.opacity),
+    transform: getTransform(spring.transform),
+    config: getConfig(spring.config),
+    onStart: getCallback(spring.onStart),
+    onFrame: getCallback(spring.onFrame),
+    onRest: getCallback(spring.onRest)
+  };
 }
 
 function getY(currentLocation) {
@@ -1644,9 +1638,6 @@ function getY$1(_ref) {
 
 var TransitionViews = function TransitionViews(_ref2) {
   var location = _ref2.location,
-      enter = _ref2.enter,
-      usual = _ref2.usual,
-      leave = _ref2.leave,
       mode = _ref2.mode,
       children = _ref2.children,
       style = _ref2.style;
@@ -1654,6 +1645,9 @@ var TransitionViews = function TransitionViews(_ref2) {
   var _useStateContext = useStateContext(),
       _useStateContext2 = _slicedToArray(_useStateContext, 2),
       _useStateContext2$ = _useStateContext2[0],
+      enter = _useStateContext2$.enter,
+      usual = _useStateContext2$.usual,
+      leave = _useStateContext2$.leave,
       to = _useStateContext2$.to,
       currentLocation = _useStateContext2$.currentLocation,
       views = _useStateContext2$.views,

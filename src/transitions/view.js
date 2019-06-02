@@ -18,6 +18,7 @@ const TransitionView = ({
     }
     return {}
   })
+
   const [props, set] = useSpring(() => {
     return skipEnterAnimation
       ? usual
