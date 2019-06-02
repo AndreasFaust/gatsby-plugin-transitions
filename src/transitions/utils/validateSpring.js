@@ -19,7 +19,7 @@ function getOpacity (opacity) {
 
 function getTransform (transform) {
   if (transform && typeof transform === 'string') return transform
-  return 'translate3d(0px, 0px, 0px)'
+  return 'none'
 }
 
 export default function validateSpring (spring) {
