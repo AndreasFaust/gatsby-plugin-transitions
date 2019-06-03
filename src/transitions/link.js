@@ -16,7 +16,8 @@ const TransitionLink = ({
   const [, dispatch] = useStateContext()
   function onClick (event) {
     event.preventDefault()
-    dispatch({ type: 'NAVIGATE', to, enter, usual, leave, y, mode })
+    const scrollY = typeof y === 'function' ? y() : y
+    dispatch({ type: 'NAVIGATE', to, enter, usual, leave, y: scrollY, mode })
   }
   return (
     <a
@@ -35,7 +36,7 @@ TransitionLink.propTypes = {
   enter: propTypes.object,
   usual: propTypes.object,
   leave: propTypes.object,
-  y: propTypes.number,
+  y: propTypes.oneOfType([propTypes.number, propTypes.func]),
   mode: propTypes.string,
   className: propTypes.string,
   style: propTypes.object,

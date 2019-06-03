@@ -1413,13 +1413,14 @@ var TransitionLink = function TransitionLink(_ref) {
 
   function onClick(event) {
     event.preventDefault();
+    var scrollY = typeof y === 'function' ? y() : y;
     dispatch({
       type: 'NAVIGATE',
       to: to,
       enter: enter,
       usual: usual,
       leave: leave,
-      y: y,
+      y: scrollY,
       mode: mode
     });
   }
@@ -1437,7 +1438,7 @@ TransitionLink.propTypes = {
   enter: propTypes.object,
   usual: propTypes.object,
   leave: propTypes.object,
-  y: propTypes.number,
+  y: propTypes.oneOfType([propTypes.number, propTypes.func]),
   mode: propTypes.string,
   className: propTypes.string,
   style: propTypes.object,
@@ -1508,6 +1509,7 @@ var TransitionView = function TransitionView(_ref) {
           config: enter.config,
           onStart: function onStart(props) {
             if (mode === 'successive' || isKeep) {
+              console.log(y);
               window.scrollTo(0, y);
             }
 

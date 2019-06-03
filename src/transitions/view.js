@@ -36,6 +36,7 @@ const TransitionView = ({
           config: enter.config,
           onStart: (props) => {
             if (mode === 'successive' || isKeep) {
+              console.log(y)
               window.scrollTo(0, y)
             }
             if (typeof enter.onStart === 'function') enter.onStart(props)
