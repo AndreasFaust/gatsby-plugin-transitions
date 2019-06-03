@@ -1,3 +1,9 @@
+### 1.9.0 (2019-06-03)
+
+##### New Features
+
+*  TransitionLink: y takes function as prop. (1790a629)
+
 #### 1.8.12 (2019-06-02)
 
 #### 1.8.11 (2019-06-02)
