@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { useStateContext } from './state'
+import { useTransitionStore } from './provider'
 import { useSpring, animated } from 'react-spring'
 
 const TransitionView = ({
   view, mode, action, enter, leave, usual, y, isKeep, skipEnterAnimation, skipLeaveAnimation
 }) => {
-  const [, dispatch] = useStateContext()
+  const [, dispatch] = useTransitionStore()
   const [styles, setStyles] = useState(() => {
     if (mode === 'immediate') {
       return {
@@ -36,7 +36,6 @@ const TransitionView = ({
           config: enter.config,
           onStart: (props) => {
             if (mode === 'successive' || isKeep) {
-              console.log(y)
               window.scrollTo(0, y)
             }
             if (typeof enter.onStart === 'function') enter.onStart(props)
@@ -111,7 +110,8 @@ const TransitionView = ({
           opacity: props.opacity,
           transform: props.transform
         }}
-        className='view'>
+        className='view'
+      >
         {view}
       </animated.div>
     </div>

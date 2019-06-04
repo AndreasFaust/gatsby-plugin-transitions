@@ -1,4 +1,4 @@
-import validateSpring from '../utils/validateSpring'
+import validateSpring from './utils/validateSpring'
 
 function getY (currentLocation) {
   const scroll = window.sessionStorage.getItem(`@@scroll|${currentLocation.key}`)

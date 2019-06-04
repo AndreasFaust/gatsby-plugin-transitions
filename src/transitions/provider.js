@@ -1,24 +1,41 @@
-import React from 'react'
+import React, { createContext, useContext, useEffect, useReducer } from 'react'
 import propTypes from 'prop-types'
-import { StateProvider, reducer } from './state'
-import Views from './views'
 import validateSpring from './utils/validateSpring'
+import reducer from './reducer'
+
+export const TransitionContext = createContext()
 
 const TransitionProvider = (props) => {
+  const [state, dispatch] = useReducer(reducer, {
+    currentLocation: props.location,
+    prevLocation: null,
+    views: [],
+    queue: null,
+    mode: props.mode,
+    enter: validateSpring(props.enter),
+    usual: validateSpring(props.usual),
+    leave: validateSpring(props.leave),
+    hasEntered: false
+  })
+
+  useEffect(() => {
+    dispatch({
+      type: 'UPDATE_MODE',
+      mode: props.mode
+    })
+  }, [props.mode])
+
+  useEffect(() => {
+    dispatch({
+      type: 'UPDATE_LOCATION',
+      location: props.location
+    })
+  }, [props.location.pathname])
+
   return (
-    <StateProvider reducer={reducer} initialState={{
-      currentLocation: props.location,
-      prevLocation: null,
-      views: [props.children],
-      queue: null,
-      mode: props.mode,
-      enter: validateSpring(props.enter),
-      usual: validateSpring(props.usual),
-      leave: validateSpring(props.leave),
-      hasEntered: false
-    }}>
-      <Views {...props} />
-    </StateProvider>
+    <TransitionContext.Provider value={[state, dispatch]}>
+      {props.children}
+    </TransitionContext.Provider>
   )
 }
 
@@ -42,4 +59,5 @@ TransitionProvider.defaultProps = {
   style: null
 }
 
-export default TransitionProvider
+export { TransitionProvider }
+export const useTransitionStore = () => useContext(TransitionContext)

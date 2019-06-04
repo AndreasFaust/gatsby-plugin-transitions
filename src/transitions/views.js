@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useStateContext } from './state'
+import { useTransitionStore } from './provider'
 import { navigate } from 'gatsby'
 
 import View from './view'
@@ -14,26 +14,22 @@ function getY ({ view, keep, currentLocation }) {
   return 0
 }
 
-const TransitionViews = ({ location, mode, children, style }) => {
-  const [{ enter, usual, leave, to, currentLocation, views, keep, modeInterim }, dispatch] = useStateContext()
-
-  useEffect(() => {
-    dispatch({
-      type: 'UPDATE_MODE',
-      mode
-    })
-  }, [mode])
+const TransitionViews = ({ children, style }) => {
+  const [{
+    enter,
+    usual,
+    leave,
+    to,
+    currentLocation,
+    views,
+    keep,
+    mode,
+    modeInterim
+  }, dispatch] = useTransitionStore()
 
   useEffect(() => {
     if (to) navigate(to)
   }, [to])
-
-  useEffect(() => {
-    dispatch({
-      type: 'UPDATE_LOCATION',
-      location
-    })
-  }, [location.pathname])
 
   useEffect(() => {
     const currentMode = modeInterim || mode

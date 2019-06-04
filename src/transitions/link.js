@@ -1,6 +1,6 @@
 import React from 'react'
 import propTypes from 'prop-types'
-import { useStateContext } from './state'
+import { useTransitionStore } from './provider'
 
 const TransitionLink = ({
   to,
@@ -13,7 +13,7 @@ const TransitionLink = ({
   style,
   children
 }) => {
-  const [, dispatch] = useStateContext()
+  const [, dispatch] = useTransitionStore()
   function onClick (event) {
     event.preventDefault()
     const scrollY = typeof y === 'function' ? y() : y
