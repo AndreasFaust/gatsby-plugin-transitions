@@ -23,8 +23,7 @@ const TransitionViews = ({ children, style }) => {
     currentLocation,
     views,
     keep,
-    mode,
-    modeInterim
+    mode
   }, dispatch] = useTransitionStore()
 
   useEffect(() => {
@@ -32,7 +31,7 @@ const TransitionViews = ({ children, style }) => {
   }, [to])
 
   useEffect(() => {
-    const currentMode = modeInterim || mode
+    const currentMode = currentLocation.mode || mode
     if (currentMode === 'successive') {
       if (views.filter(view => view).length) {
         dispatch({ type: 'ADD_QUEUE', view: children })
@@ -43,7 +42,7 @@ const TransitionViews = ({ children, style }) => {
     if (currentMode === 'immediate') {
       dispatch({ type: 'ADD_VIEW_DIRECTLY', view: children })
     }
-  }, [children.key])
+  }, [currentLocation.key])
 
   return (
     <div className='views' style={style}>
@@ -54,10 +53,10 @@ const TransitionViews = ({ children, style }) => {
           <View
             key={view.props.location.key}
             view={view}
-            leave={(currentLocation && currentLocation.leave) || leave}
-            usual={(currentLocation && view.props.location.pathname === currentLocation.pathname && currentLocation.usual) || usual}
-            enter={(currentLocation && view.props.location.pathname === currentLocation.pathname && currentLocation.enter) || enter}
-            mode={(currentLocation && currentLocation.mode) || mode}
+            leave={currentLocation.leave || leave}
+            usual={(view.props.location.pathname === currentLocation.pathname && currentLocation.usual) || usual}
+            enter={(view.props.location.pathname === currentLocation.pathname && currentLocation.enter) || enter}
+            mode={currentLocation.mode || mode}
             isKeep={isKeep}
             skipEnterAnimation={isKeep}
             skipLeaveAnimation={isKeep}

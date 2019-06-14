@@ -45,7 +45,7 @@ exports.shouldUpdateScroll = () => {
 Activate `gatsby-plugin-layout`. Either do it your own way, or take the default way:
 
 - Create the folder `src/layouts` and the file `src/layouts/index.js`.
-- Here you need to wrap all `children` into the component `TransitionProvider`
+- Here you need to wrap all `children` into the components `TransitionProvider` and `TransitionViews`. 
 
 ```jsx
 import React from "react";
@@ -53,7 +53,11 @@ import { TransitionProvider } from "gatsby-plugin-transitions";
 
 const Layout = ({ location, children }) => {
   return (
-    <TransitionProvider location={location}>{children}</TransitionProvider>
+    <TransitionProvider location={location}>
+      <TransitionViews>
+        {children}
+      </TransitionViews>
+    </TransitionProvider>
   );
 };
 
@@ -101,10 +105,12 @@ const Layout = ({ location, children }) => {
           }
         }}
       >
-        {children}
+        // This Header is an example for a component, that should remain between routes
+        <Header />
+        <TransitionViews>
+          {children}
+        </TransitionViews>
       </TransitionProvider>
-      // This Header is an example for a component, that should remain between routes
-      <Header />
     </>
   );
 };
@@ -126,6 +132,7 @@ List of props:
 | **usual**    | object   | `{ opacity: 1 }`                  | Normal state of the view.                                                                 |
 | **leave**    | object   | `{ opacity: 0, config: 'stiff' }` | To-Values, when the view is leaving. Accepts also callbacks and react-spring-`config`.    |
 | **style**    | object   | `null`                            | Style the views-wrapper (which is a div with class `views`).                              |
+
 
 ### Transition-Mode
 
@@ -226,13 +233,12 @@ List of props:
 | **enter** | object   | `{ opacity: 0, config: 'stiff' }` | From-values, when the view is entering           |
 | **usual** | object   | `{ opacity: 1, config: 'stiff' }` | Normal state of the view.                        |
 | **leave** | object   | `{ opacity: 0, config: 'stiff' }` | To-Values, when the view is leaving.             |
-| **y**     | number   | `0`                               | Scroll position of the next view.                |
+| **y**     | number or function   | `0`                               | Scroll position of the next view. If function, it must return a number (for example current window.scrollY).                |
 | **style** | object   | `null`                            | Style the Link.                                  |
 
 ## useTransitionStore
 
 A hook, that exposes the plugin’s state-management.
-Unfortunately it is currently not possible to use `useTransitionStore` outside of `TransitionProvider`.
 It returns an `Array` with 2 elements:
 
 1.  **state** of type `object`
@@ -279,7 +285,7 @@ const MyComponent = () => {
             transform: "translate3d(0, -50vh, 0)",
             config: "stiff"
           },
-          y: 1000
+          y: 500
         });
       }
     }

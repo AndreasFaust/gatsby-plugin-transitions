@@ -7,7 +7,7 @@ export const TransitionContext = createContext()
 
 const TransitionProvider = (props) => {
   const [state, dispatch] = useReducer(reducer, {
-    currentLocation: props.location,
+    currentLocation: { key: undefined },
     prevLocation: null,
     views: [],
     queue: null,

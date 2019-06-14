@@ -43,11 +43,11 @@ export default (state, action) => {
         },
         prevLocation: {
           ...state.currentLocation,
-          y: getY(state.currentLocation)
+          y: state.currentLocation && getY(state.currentLocation)
         },
         views: [null, ...filterViews(state.views)],
         keep: state.keepInterim
-          ? { ...state.views[0], y: getY(state.currentLocation) }
+          ? { ...state.views[0], y: state.currentLocation && getY(state.currentLocation) }
           : state.keep,
         keepInterim: false,
         hasEntered: false
