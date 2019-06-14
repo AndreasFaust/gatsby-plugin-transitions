@@ -1327,11 +1327,11 @@ var reducer = (function (state, action) {
           mode: state.modeInterim
         }),
         prevLocation: _objectSpread({}, state.currentLocation, {
-          y: getY(state.currentLocation)
+          y: state.currentLocation && getY(state.currentLocation)
         }),
         views: [null].concat(_toConsumableArray(filterViews(state.views))),
         keep: state.keepInterim ? _objectSpread({}, state.views[0], {
-          y: getY(state.currentLocation)
+          y: state.currentLocation && getY(state.currentLocation)
         }) : state.keep,
         keepInterim: false,
         hasEntered: false
@@ -1382,18 +1382,72 @@ var reducer = (function (state, action) {
   }
 });
 
-// https://medium.com/simply/state-management-with-react-hooks-and-context-api-at-10-lines-of-code-baf6be8302c
-var StateContext = React.createContext();
-var StateProvider = function StateProvider(_ref) {
-  var reducer = _ref.reducer,
-      initialState = _ref.initialState,
-      children = _ref.children;
-  return React__default.createElement(StateContext.Provider, {
-    value: React.useReducer(reducer, initialState)
-  }, children);
+var TransitionContext = React.createContext();
+
+var TransitionProvider = function TransitionProvider(props) {
+  var _useReducer = React.useReducer(reducer, {
+    currentLocation: {
+      key: undefined
+    },
+    prevLocation: null,
+    views: [],
+    queue: null,
+    mode: props.mode,
+    enter: validateSpring(props.enter),
+    usual: validateSpring(props.usual),
+    leave: validateSpring(props.leave),
+    hasEntered: false
+  }),
+      _useReducer2 = _slicedToArray(_useReducer, 2),
+      state = _useReducer2[0],
+      dispatch = _useReducer2[1];
+
+  React.useEffect(function () {
+    dispatch({
+      type: 'UPDATE_MODE',
+      mode: props.mode
+    });
+  }, [props.mode]);
+  React.useEffect(function () {
+    dispatch({
+      type: 'UPDATE_LOCATION',
+      location: props.location
+    });
+  }, [props.location.pathname]);
+  return React__default.createElement(TransitionContext.Provider, {
+    value: [state, dispatch]
+  }, props.children);
 };
-var useStateContext = function useStateContext() {
-  return React.useContext(StateContext);
+
+TransitionProvider.propTypes = {
+  location: propTypes.object,
+  mode: propTypes.oneOf(['successive', 'immediate']),
+  children: propTypes.node,
+  enter: propTypes.object,
+  usual: propTypes.object,
+  leave: propTypes.object,
+  style: propTypes.object
+};
+TransitionProvider.defaultProps = {
+  mode: 'successive',
+  location: {},
+  children: null,
+  enter: {
+    opacity: 0,
+    config: 'stiff'
+  },
+  usual: {
+    opacity: 1,
+    config: 'stiff'
+  },
+  leave: {
+    opacity: 0,
+    config: 'stiff'
+  },
+  style: null
+};
+var useTransitionStore = function useTransitionStore() {
+  return React.useContext(TransitionContext);
 };
 
 var TransitionLink = function TransitionLink(_ref) {
@@ -1407,9 +1461,9 @@ var TransitionLink = function TransitionLink(_ref) {
       style = _ref.style,
       children = _ref.children;
 
-  var _useStateContext = useStateContext(),
-      _useStateContext2 = _slicedToArray(_useStateContext, 2),
-      dispatch = _useStateContext2[1];
+  var _useTransitionStore = useTransitionStore(),
+      _useTransitionStore2 = _slicedToArray(_useTransitionStore, 2),
+      dispatch = _useTransitionStore2[1];
 
   function onClick(event) {
     event.preventDefault();
@@ -1467,9 +1521,9 @@ var TransitionView = function TransitionView(_ref) {
       skipEnterAnimation = _ref.skipEnterAnimation,
       skipLeaveAnimation = _ref.skipLeaveAnimation;
 
-  var _useStateContext = useStateContext(),
-      _useStateContext2 = _slicedToArray(_useStateContext, 2),
-      dispatch = _useStateContext2[1];
+  var _useTransitionStore = useTransitionStore(),
+      _useTransitionStore2 = _slicedToArray(_useTransitionStore, 2),
+      dispatch = _useTransitionStore2[1];
 
   var _useState = React.useState(function () {
     if (mode === 'immediate') {
@@ -1509,7 +1563,6 @@ var TransitionView = function TransitionView(_ref) {
           config: enter.config,
           onStart: function onStart(props) {
             if (mode === 'successive' || isKeep) {
-              console.log(y);
               window.scrollTo(0, y);
             }
 
@@ -1639,41 +1692,27 @@ function getY$1(_ref) {
 }
 
 var TransitionViews = function TransitionViews(_ref2) {
-  var location = _ref2.location,
-      mode = _ref2.mode,
-      children = _ref2.children,
+  var children = _ref2.children,
       style = _ref2.style;
 
-  var _useStateContext = useStateContext(),
-      _useStateContext2 = _slicedToArray(_useStateContext, 2),
-      _useStateContext2$ = _useStateContext2[0],
-      enter = _useStateContext2$.enter,
-      usual = _useStateContext2$.usual,
-      leave = _useStateContext2$.leave,
-      to = _useStateContext2$.to,
-      currentLocation = _useStateContext2$.currentLocation,
-      views = _useStateContext2$.views,
-      keep = _useStateContext2$.keep,
-      modeInterim = _useStateContext2$.modeInterim,
-      dispatch = _useStateContext2[1];
+  var _useTransitionStore = useTransitionStore(),
+      _useTransitionStore2 = _slicedToArray(_useTransitionStore, 2),
+      _useTransitionStore2$ = _useTransitionStore2[0],
+      enter = _useTransitionStore2$.enter,
+      usual = _useTransitionStore2$.usual,
+      leave = _useTransitionStore2$.leave,
+      to = _useTransitionStore2$.to,
+      currentLocation = _useTransitionStore2$.currentLocation,
+      views = _useTransitionStore2$.views,
+      keep = _useTransitionStore2$.keep,
+      mode = _useTransitionStore2$.mode,
+      dispatch = _useTransitionStore2[1];
 
-  React.useEffect(function () {
-    dispatch({
-      type: 'UPDATE_MODE',
-      mode: mode
-    });
-  }, [mode]);
   React.useEffect(function () {
     if (to) gatsby.navigate(to);
   }, [to]);
   React.useEffect(function () {
-    dispatch({
-      type: 'UPDATE_LOCATION',
-      location: location
-    });
-  }, [location.pathname]);
-  React.useEffect(function () {
-    var currentMode = modeInterim || mode;
+    var currentMode = currentLocation.mode || mode;
 
     if (currentMode === 'successive') {
       if (views.filter(function (view) {
@@ -1697,7 +1736,7 @@ var TransitionViews = function TransitionViews(_ref2) {
         view: children
       });
     }
-  }, [children.key]);
+  }, [currentLocation.key]);
   return React__default.createElement("div", {
     className: "views",
     style: style
@@ -1707,10 +1746,10 @@ var TransitionViews = function TransitionViews(_ref2) {
     return React__default.createElement(TransitionView, {
       key: view.props.location.key,
       view: view,
-      leave: currentLocation && currentLocation.leave || leave,
-      usual: currentLocation && view.props.location.pathname === currentLocation.pathname && currentLocation.usual || usual,
-      enter: currentLocation && view.props.location.pathname === currentLocation.pathname && currentLocation.enter || enter,
-      mode: currentLocation && currentLocation.mode || mode,
+      leave: currentLocation.leave || leave,
+      usual: view.props.location.pathname === currentLocation.pathname && currentLocation.usual || usual,
+      enter: view.props.location.pathname === currentLocation.pathname && currentLocation.enter || enter,
+      mode: currentLocation.mode || mode,
       isKeep: isKeep,
       skipEnterAnimation: isKeep,
       skipLeaveAnimation: isKeep,
@@ -1727,52 +1766,8 @@ var TransitionViews = function TransitionViews(_ref2) {
   }));
 };
 
-var TransitionProvider = function TransitionProvider(props) {
-  return React__default.createElement(StateProvider, {
-    reducer: reducer,
-    initialState: {
-      currentLocation: props.location,
-      prevLocation: null,
-      views: [props.children],
-      queue: null,
-      mode: props.mode,
-      enter: validateSpring(props.enter),
-      usual: validateSpring(props.usual),
-      leave: validateSpring(props.leave),
-      hasEntered: false
-    }
-  }, React__default.createElement(TransitionViews, props));
-};
-
-TransitionProvider.propTypes = {
-  location: propTypes.object,
-  mode: propTypes.oneOf(['successive', 'immediate']),
-  children: propTypes.node,
-  enter: propTypes.object,
-  usual: propTypes.object,
-  leave: propTypes.object,
-  style: propTypes.object
-};
-TransitionProvider.defaultProps = {
-  mode: 'successive',
-  location: {},
-  children: null,
-  enter: {
-    opacity: 0,
-    config: 'stiff'
-  },
-  usual: {
-    opacity: 1,
-    config: 'stiff'
-  },
-  leave: {
-    opacity: 0,
-    config: 'stiff'
-  },
-  style: null
-};
-
 exports.TransitionLink = TransitionLink;
 exports.TransitionProvider = TransitionProvider;
-exports.useTransitionStore = useStateContext;
+exports.TransitionViews = TransitionViews;
+exports.useTransitionStore = useTransitionStore;
 //# sourceMappingURL=index.js.map
