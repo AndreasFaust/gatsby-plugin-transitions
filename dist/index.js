@@ -1285,8 +1285,8 @@ function validateSpring(spring) {
   };
 }
 
-function getY(currentLocation) {
-  var scroll = window.sessionStorage.getItem("@@scroll|".concat(currentLocation.key));
+function getY(key) {
+  var scroll = window.sessionStorage.getItem("@@scroll|".concat(key));
   var scrollArray = JSON.parse(scroll);
   if (!scrollArray) return 0;
   return scrollArray[1];
@@ -1312,6 +1312,7 @@ var reducer = (function (state, action) {
       });
 
     case 'UPDATE_LOCATION':
+      var locationScrollY = getY(action.location.key);
       return _objectSpread({}, state, {
         to: undefined,
         y: undefined,
@@ -1320,18 +1321,19 @@ var reducer = (function (state, action) {
         leaveInterim: null,
         modeInterim: '',
         currentLocation: _objectSpread({}, action.location, {
+          skipAnimations: locationScrollY && window.safari,
           enter: state.enterInterim,
           usual: state.usualInterim,
           leave: state.leaveInterim,
-          y: state.y || 0,
+          y: state.y || locationScrollY || 0,
           mode: state.modeInterim
         }),
         prevLocation: _objectSpread({}, state.currentLocation, {
-          y: state.currentLocation && getY(state.currentLocation)
+          y: state.currentLocation && getY(state.currentLocation.key)
         }),
         views: [null].concat(_toConsumableArray(filterViews(state.views))),
         keep: state.keepInterim ? _objectSpread({}, state.views[0], {
-          y: state.currentLocation && getY(state.currentLocation)
+          y: state.currentLocation && getY(state.currentLocation.key)
         }) : state.keep,
         keepInterim: false,
         hasEntered: false
@@ -1518,6 +1520,7 @@ var TransitionView = function TransitionView(_ref) {
       usual = _ref.usual,
       y = _ref.y,
       isKeep = _ref.isKeep,
+      skipAnimations = _ref.skipAnimations,
       skipEnterAnimation = _ref.skipEnterAnimation,
       skipLeaveAnimation = _ref.skipLeaveAnimation;
 
@@ -1758,6 +1761,7 @@ var TransitionViews = function TransitionViews(_ref2) {
       enter: view.props.location.pathname === currentLocation.pathname && currentLocation.enter || enter,
       mode: currentLocation.mode || mode,
       isKeep: isKeep,
+      skipAnimations: currentLocation.skipAnimations,
       skipEnterAnimation: isKeep,
       skipLeaveAnimation: isKeep,
       y: getY$1({

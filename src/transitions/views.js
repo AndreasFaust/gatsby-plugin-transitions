@@ -58,6 +58,7 @@ const TransitionViews = ({ children, style }) => {
             enter={(view.props.location.pathname === currentLocation.pathname && currentLocation.enter) || enter}
             mode={currentLocation.mode || mode}
             isKeep={isKeep}
+            skipAnimations={currentLocation.skipAnimations}
             skipEnterAnimation={isKeep}
             skipLeaveAnimation={isKeep}
             y={getY({ keep, view, currentLocation })}

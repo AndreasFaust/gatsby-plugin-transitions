@@ -1,7 +1,7 @@
 import validateSpring from './utils/validateSpring'
 
-function getY (currentLocation) {
-  const scroll = window.sessionStorage.getItem(`@@scroll|${currentLocation.key}`)
+function getY (key) {
+  const scroll = window.sessionStorage.getItem(`@@scroll|${key}`)
   const scrollArray = JSON.parse(scroll)
   if (!scrollArray) return 0
   return scrollArray[1]
@@ -25,6 +25,7 @@ export default (state, action) => {
         y: action.y
       }
     case 'UPDATE_LOCATION':
+      const locationScrollY = getY(action.location.key)
       return {
         ...state,
         to: undefined,
@@ -35,19 +36,20 @@ export default (state, action) => {
         modeInterim: '',
         currentLocation: {
           ...action.location,
+          skipAnimations: locationScrollY && window.safari,
           enter: state.enterInterim,
           usual: state.usualInterim,
           leave: state.leaveInterim,
-          y: state.y || 0,
+          y: state.y || locationScrollY || 0,
           mode: state.modeInterim
         },
         prevLocation: {
           ...state.currentLocation,
-          y: state.currentLocation && getY(state.currentLocation)
+          y: state.currentLocation && getY(state.currentLocation.key)
         },
         views: [null, ...filterViews(state.views)],
         keep: state.keepInterim
-          ? { ...state.views[0], y: state.currentLocation && getY(state.currentLocation) }
+          ? { ...state.views[0], y: state.currentLocation && getY(state.currentLocation.key) }
           : state.keep,
         keepInterim: false,
         hasEntered: false

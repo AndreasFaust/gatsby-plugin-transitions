@@ -3,7 +3,17 @@ import { useTransitionStore } from './provider'
 import { useSpring, animated } from 'react-spring'
 
 const TransitionView = ({
-  view, mode, action, enter, leave, usual, y, isKeep, skipEnterAnimation, skipLeaveAnimation
+  view,
+  mode,
+  action,
+  enter,
+  leave,
+  usual,
+  y,
+  isKeep,
+  skipAnimations,
+  skipEnterAnimation,
+  skipLeaveAnimation
 }) => {
   const [{ hasEntered }, dispatch] = useTransitionStore()
   const [styles, setStyles] = useState(() => {
