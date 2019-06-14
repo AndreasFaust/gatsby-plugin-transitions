@@ -1,3 +1,9 @@
+#### 2.1.1 (2019-06-14)
+
+##### Documentation Changes
+
+*  Add history hint. (074f5f2d)
+
 ### 2.1.0 (2019-06-14)
 
 ##### New Features
