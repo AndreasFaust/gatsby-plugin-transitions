@@ -1,3 +1,9 @@
+#### 2.0.3 (2019-06-14)
+
+##### Bug Fixes
+
+*  Fix flickering on mode:immediate and scrollY > 0 in Safari. (c94f4d5d)
+
 #### 2.0.2 (2019-06-14)
 
 ##### Documentation Changes
