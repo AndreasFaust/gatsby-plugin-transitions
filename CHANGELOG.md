@@ -1,3 +1,9 @@
+## 2.0.0 (2019-06-14)
+
+##### Breaking Changes
+
+*  Add new provider-component. (b0500558)
+
 ### 1.9.0 (2019-06-03)
 
 ##### New Features
