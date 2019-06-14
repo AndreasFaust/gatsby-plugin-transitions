@@ -49,7 +49,7 @@ Activate `gatsby-plugin-layout`. Either do it your own way, or take the default 
 
 ```jsx
 import React from "react";
-import { TransitionProvider } from "gatsby-plugin-transitions";
+import { TransitionProvider, TransitionViews } from "gatsby-plugin-transitions";
 
 const Layout = ({ location, children }) => {
   return (
@@ -70,7 +70,7 @@ export default Layout;
 
 ```jsx
 import React, { useState } from "react";
-import { TransitionProvider } from "gatsby-plugin-transitions";
+import { TransitionProvider, TransitionViews } from "gatsby-plugin-transitions";
 // Example Header-Component (see below)
 import Header from "./header";
 
@@ -210,7 +210,7 @@ const MyComponent = () => (
         opacity: 1
       }}
       mode="immediate"
-      y={1000}
+      y={() => window.scrollY}
     >
       I have a special animation!
       <br />
@@ -236,6 +236,8 @@ List of props:
 | **y**     | number or function   | `0`                               | Scroll position of the next view. If function, it must return a number (for example current window.scrollY).                |
 | **style** | object   | `null`                            | Style the Link.                                  |
 
+🔥`TransitionLink` can only be used in components, that are children of `TransitionProvider`!
+
 ## useTransitionStore
 
 A hook, that exposes the plugin’s state-management.
@@ -258,6 +260,8 @@ const MyComponent = () => {
 
 export default MyComponent;
 ```
+
+🔥`useTransitionStore` can only be used in components, that are children of `TransitionProvider`!
 
 ## Navigate programmatically
 
