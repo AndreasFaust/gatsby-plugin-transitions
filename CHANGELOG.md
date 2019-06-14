@@ -1,3 +1,9 @@
+### 2.1.0 (2019-06-14)
+
+##### New Features
+
+*  keep scrollY on going backwards or forwards in browser-history. (eba11e9b)
+
 #### 2.0.3 (2019-06-14)
 
 ##### Bug Fixes
