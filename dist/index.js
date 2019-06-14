@@ -1523,6 +1523,7 @@ var TransitionView = function TransitionView(_ref) {
 
   var _useTransitionStore = useTransitionStore(),
       _useTransitionStore2 = _slicedToArray(_useTransitionStore, 2),
+      hasEntered = _useTransitionStore2[0].hasEntered,
       dispatch = _useTransitionStore2[1];
 
   var _useState = React.useState(function () {
@@ -1582,15 +1583,9 @@ var TransitionView = function TransitionView(_ref) {
             }
 
             if (mode === 'immediate') {
-              setStyles({
-                position: 'relative',
-                transform: 'translate3d(0, 0px, 0)',
-                willChange: ''
-              });
               window.scrollTo(0, y);
             }
 
-            if (typeof enter.onRest === 'function') enter.onRest(props);
             dispatch({
               type: 'HAS_ENTERED'
             });
@@ -1642,12 +1637,24 @@ var TransitionView = function TransitionView(_ref) {
         break;
     }
   }, [action]);
+  React.useEffect(function () {
+    if (!hasEntered) return;
+
+    if (mode === 'immediate') {
+      setStyles({
+        position: 'relative',
+        transform: 'translate3d(0, 0px, 0)',
+        willChange: ''
+      });
+    }
+
+    if (typeof enter.onRest === 'function') enter.onRest(props);
+  }, [hasEntered]);
   return React__default.createElement("div", {
     className: "view-container",
     style: _objectSpread({
       width: '100%',
-      willChange: mode === 'immediate' && 'transform',
-      top: 0
+      willChange: mode === 'immediate' && 'transform'
     }, styles)
   }, React__default.createElement(reactSpring.animated.div, {
     style: {

@@ -3,9 +3,10 @@ import React, { useEffect } from 'react'
 import { TransitionLink, useTransitionStore } from '../transitions'
 
 const SecondPage = ({ location }) => {
-  const [, dispatch] = useTransitionStore()
+  const [{ hasEntered }, dispatch] = useTransitionStore()
   useEffect(() => {
     function onScroll () {
+      if (!hasEntered) return
       if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 2) {
         dispatch({
           type: 'NAVIGATE',
@@ -20,7 +21,7 @@ const SecondPage = ({ location }) => {
     }
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+  }, [hasEntered])
 
   return (
     <div className='content content--2'>

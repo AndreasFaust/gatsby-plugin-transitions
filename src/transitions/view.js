@@ -5,7 +5,7 @@ import { useSpring, animated } from 'react-spring'
 const TransitionView = ({
   view, mode, action, enter, leave, usual, y, isKeep, skipEnterAnimation, skipLeaveAnimation
 }) => {
-  const [, dispatch] = useTransitionStore()
+  const [{ hasEntered }, dispatch] = useTransitionStore()
   const [styles, setStyles] = useState(() => {
     if (mode === 'immediate') {
       return {
@@ -49,14 +49,8 @@ const TransitionView = ({
               setStyles({ opacity: 1 })
             }
             if (mode === 'immediate') {
-              setStyles({
-                position: 'relative',
-                transform: 'translate3d(0, 0px, 0)',
-                willChange: ''
-              })
               window.scrollTo(0, y)
             }
-            if (typeof enter.onRest === 'function') enter.onRest(props)
             dispatch({ type: 'HAS_ENTERED' })
           }
         })
@@ -93,13 +87,25 @@ const TransitionView = ({
     }
   }, [action])
 
+  useEffect(() => {
+    if (!hasEntered) return
+    if (mode === 'immediate') {
+      setStyles({
+        position: 'relative',
+        transform: 'translate3d(0, 0px, 0)',
+        willChange: ''
+      })
+    }
+    if (typeof enter.onRest === 'function') enter.onRest(props)
+  }, [hasEntered])
+
   return (
     <div
       className='view-container'
       style={{
         width: '100%',
         willChange: mode === 'immediate' && 'transform',
-        top: 0,
+        // top: 0,
         ...styles
       }}
     >
