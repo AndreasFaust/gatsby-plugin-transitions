@@ -3,6 +3,7 @@
 - Default animation for every page-transition
 - Define **per link** animations additionally
 - Two animation-modes: **successive** (animate out, then animate in) and **immediate** (in and out at the same time)
+- Restores scroll-position on traversing browser-history
 
 [![NPM](https://img.shields.io/npm/v/gatsby-plugin-transitions.svg)](https://www.npmjs.com/package/gatsby-plugin-transitions) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
