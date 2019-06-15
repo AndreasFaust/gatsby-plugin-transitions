@@ -1,3 +1,9 @@
+#### 2.1.2 (2019-06-15)
+
+##### Bug Fixes
+
+*  Fix 'mode: immediate' and 'y: n' scroll not to n, but to 0. (d2298860)
+
 #### 2.1.1 (2019-06-14)
 
 ##### Documentation Changes
