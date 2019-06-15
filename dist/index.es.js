@@ -1578,10 +1578,6 @@ var TransitionView = function TransitionView(_ref) {
               });
             }
 
-            if (mode === 'immediate') {
-              window.scrollTo(0, y);
-            }
-
             dispatch({
               type: 'HAS_ENTERED'
             });
@@ -1646,11 +1642,17 @@ var TransitionView = function TransitionView(_ref) {
 
     if (typeof enter.onRest === 'function') enter.onRest(props);
   }, [hasEntered]);
+  useEffect(function () {
+    if (styles.position === 'relative') {
+      window.scrollTo(0, y);
+    }
+  }, [styles.position]);
   return React.createElement("div", {
     className: "view-container",
     style: _objectSpread({
       width: '100%',
-      willChange: mode === 'immediate' && 'transform'
+      willChange: mode === 'immediate' && 'transform',
+      top: 0
     }, styles)
   }, React.createElement(animated.div, {
     style: {

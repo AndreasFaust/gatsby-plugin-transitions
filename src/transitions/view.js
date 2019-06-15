@@ -58,9 +58,6 @@ const TransitionView = ({
               dispatch({ type: 'REMOVE_KEEP' })
               setStyles({ opacity: 1 })
             }
-            if (mode === 'immediate') {
-              window.scrollTo(0, y)
-            }
             dispatch({ type: 'HAS_ENTERED' })
           }
         })
@@ -109,13 +106,19 @@ const TransitionView = ({
     if (typeof enter.onRest === 'function') enter.onRest(props)
   }, [hasEntered])
 
+  useEffect(() => {
+    if (styles.position === 'relative') {
+      window.scrollTo(0, y)
+    }
+  }, [styles.position])
+
   return (
     <div
       className='view-container'
       style={{
         width: '100%',
         willChange: mode === 'immediate' && 'transform',
-        // top: 0,
+        top: 0,
         ...styles
       }}
     >
