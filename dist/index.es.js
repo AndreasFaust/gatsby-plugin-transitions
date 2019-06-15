@@ -1638,13 +1638,14 @@ var TransitionView = function TransitionView(_ref) {
         transform: 'translate3d(0, 0px, 0)',
         willChange: ''
       });
+      window.scrollTo(0, y); // scroll once for chrome…
     }
 
     if (typeof enter.onRest === 'function') enter.onRest(props);
   }, [hasEntered]);
   useEffect(function () {
     if (styles.position === 'relative') {
-      window.scrollTo(0, y);
+      window.scrollTo(0, y); // … and a second time for safari
     }
   }, [styles.position]);
   return React.createElement("div", {
