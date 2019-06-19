@@ -77,42 +77,40 @@ import Header from "./header";
 
 const Layout = ({ location, children }) => {
   return (
-    <>
-      <TransitionProvider
-        location={location}
-        mode="immediate"
-        enter={{
-          opacity: 0,
-          transform: "translate3d(0,20vh,0) scale3d(1, 1, 1) rotate(0deg)",
-          config: {
-            mass: 1,
-            tension: 210,
-            friction: 20,
-            clamp: true
-          },
-          onRest: () => {
-            console.log("Hello, World!");
-          }
-        }}
-        usual={{
-          opacity: 1,
-          transform: "translate3d(0vh,0vh,0) scale3d(1, 1, 1) rotate(0deg)"
-        }}
-        leave={{
-          opacity: 0,
-          transform: "translate3d(0vh,0vh,0) scale3d(2, 2, 1) rotate(180deg)",
-          config: {
-            duration: 1000
-          }
-        }}
-      >
-        // This Header is an example for a component, that should remain between routes
-        <Header />
-        <TransitionViews>
-          {children}
-        </TransitionViews>
-      </TransitionProvider>
-    </>
+    <TransitionProvider
+      location={location}
+      mode="immediate"
+      enter={{
+        opacity: 0,
+        transform: "translate3d(0,20vh,0) scale3d(1, 1, 1) rotate(0deg)",
+        config: {
+          mass: 1,
+          tension: 210,
+          friction: 20,
+          clamp: true
+        },
+        onRest: () => {
+          console.log("Hello, World!");
+        }
+      }}
+      usual={{
+        opacity: 1,
+        transform: "translate3d(0vh,0vh,0) scale3d(1, 1, 1) rotate(0deg)"
+      }}
+      leave={{
+        opacity: 0,
+        transform: "translate3d(0vh,0vh,0) scale3d(2, 2, 1) rotate(180deg)",
+        config: {
+          duration: 1000
+        }
+      }}
+    >
+      // This Header is an example for a component, that should remain between routes
+      <Header />
+      <TransitionViews>
+        {children}
+      </TransitionViews>
+    </TransitionProvider>
   );
 };
 
@@ -177,8 +175,7 @@ Or pass in the name of a **react-spring**-default (`default`, `gentle`, `wobbly`
 
 ## TransitionLink
 
-`gatsby-plugin-transition` works out of the box with Gatsby's default `Link`-component. If you want to apply custom animations to certain links, use `TransitionLink`.
-Unfortunately `TransitionLink` can currently only used as child of `TransitionProvider`.
+`gatsby-plugin-transition` works out of the box with Gatsby's default `Link`-component. If you want to apply custom animations to certain links, use `TransitionLink`. 
 
 ```jsx
 import React from "react";
@@ -333,8 +330,8 @@ const MyComponent = () => (
       transform: "translate3d(100vh,0vh,0)"
     }}
     usual={{
-      transform: "translate3d(0vh,100vh,0)",
       opacity: 1
+      transform: "translate3d(0vh,100vh,0)",
     }}
     mode="immediate"
     y={1000}
@@ -358,7 +355,7 @@ Spring-Animations "wobble", which takes extra time. To make the animations snapp
 
 Every contribution is very much appreciated.
 
-😍 **If you like gatsby-plugin-transitions, don't hesitate to star it on [GitHub](https://github.com/AndreasFaust/gatsby-plugin-transitions).**
+😍 **If you like gatsby-plugin-transitions, star it on [GitHub](https://github.com/AndreasFaust/gatsby-plugin-transitions)!**
 
 ## License
 
