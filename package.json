@@ -1,7 +1,7 @@
 {
   "name": "gatsby-plugin-transitions",
   "description": "Gatsby-plugin for animated page-transitions.",
-  "version": "2.1.5",
+  "version": "2.1.6",
   "author": "Andreas Faust",
   "license": "MIT",
   "repository": "AndreasFaust/gatsby-plugin-transitions",
