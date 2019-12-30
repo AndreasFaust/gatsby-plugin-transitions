@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Link } from 'gatsby'
-import { TransitionLink } from '../transitions'
+// import { TransitionLink } from '../transitions'
 import Select from 'react-select'
 
 const options = [
@@ -42,7 +42,7 @@ const customStyles = {
 }
 
 const Header = ({ setMode }) => {
-  function onChange (option) {
+  function onChange(option) {
     setMode(option.value)
   }
   return (
@@ -59,14 +59,16 @@ const Header = ({ setMode }) => {
         Page-3
       </Link>
       <div className='mode'>
-        <label className='mode__label'>mode: </label>
-        <Select
-          className='mode__select'
-          placeholder={options[0].label}
-          onChange={onChange}
-          options={options}
-          styles={customStyles}
-        />
+        <label className='mode__label'>
+          <span>mode:</span>
+          <Select
+            className='mode__select'
+            placeholder={options[0].label}
+            onChange={onChange}
+            options={options}
+            styles={customStyles}
+          />
+        </label>
       </div>
     </header>
   )

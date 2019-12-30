@@ -40,6 +40,10 @@
   color: #ccc;
 }
 .mode__label {
+  display: flex;
+  align-items: center;
+}
+.mode__label span{
   margin: 0.5em;
 }
 .mode__select {

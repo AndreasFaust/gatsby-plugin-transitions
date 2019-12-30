@@ -91,6 +91,7 @@ const TransitionView = ({
           }
         })
         break
+      default:
     }
   }, [action])
 

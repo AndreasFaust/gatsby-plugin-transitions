@@ -5,7 +5,7 @@ import { navigate } from 'gatsby'
 import View from './view'
 import Keep from './keep'
 
-function getY ({ view, keep, currentLocation }) {
+function getY({ view, keep, currentLocation }) {
   const isKeep = keep && keep.props.location.pathname === view.props.location.pathname
   if (isKeep) return keep.y
   if (currentLocation && currentLocation.y) {
@@ -31,6 +31,7 @@ const TransitionViews = ({ children, style }) => {
   }, [to])
 
   useEffect(() => {
+    if (!currentLocation.key) return
     const currentMode = currentLocation.mode || mode
     if (currentMode === 'successive') {
       if (views.filter(view => view).length) {
