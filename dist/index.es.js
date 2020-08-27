@@ -1771,6 +1771,14 @@ var TransitionViews = function TransitionViews(_ref2) {
       });
     }
   }, [currentLocation.key]);
+
+  if (typeof window === 'undefined') {
+    return React.createElement("div", {
+      className: "views",
+      style: style
+    }, children);
+  }
+
   return React.createElement("div", {
     className: "views",
     style: style
