@@ -45,6 +45,14 @@ const TransitionViews = ({ children, style }) => {
     }
   }, [currentLocation.key])
 
+  if (typeof window === 'undefined') {
+    return (
+      <div className='views' style={style}>
+        {children}
+      </div>
+    )
+  }
+
   return (
     <div className='views' style={style}>
       {views.map((view, index) => {

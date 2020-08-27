@@ -1778,6 +1778,14 @@ var TransitionViews = function TransitionViews(_ref2) {
       });
     }
   }, [currentLocation.key]);
+
+  if (typeof window === 'undefined') {
+    return React__default.createElement("div", {
+      className: "views",
+      style: style
+    }, children);
+  }
+
   return React__default.createElement("div", {
     className: "views",
     style: style
